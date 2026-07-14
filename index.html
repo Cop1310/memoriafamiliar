@@ -104,12 +104,17 @@ h1 span{color:var(--ac)}
 
 .pista{color:var(--tenue);font-size:13px;margin-bottom:14px}
 
-.tablero{display:grid;gap:clamp(6px,1.4vw,11px);margin-bottom:22px}
+.tablero{
+  display:grid;
+  gap:var(--gap,8px);
+  justify-content:center;      /* tablero centrado, columnas de ancho fijo */
+  margin-bottom:14px;
+  --lado:90px;
+}
 .carta{
-  aspect-ratio:3/4;
-  position:relative;          /* referencia para .cara */
+  width:var(--lado);height:var(--lado);   /* cuadrada: el nombre no necesita formato retrato */
+  position:relative;
   display:block;
-  min-height:64px;
   perspective:900px;
   background:none;border:0;padding:0;margin:0;cursor:pointer;font:inherit;
   -webkit-appearance:none;appearance:none;
@@ -139,17 +144,18 @@ h1 span{color:var(--ac)}
   transform:rotateY(180deg);
   background:var(--papel);color:var(--tinta);
   border:1px solid var(--papel-2);
-  flex-direction:column;gap:6px;padding:8px;text-align:center;
+  flex-direction:column;gap:4px;padding:calc(var(--lado) * .07);text-align:center;
 }
 .frente .nom{
-  font-family:var(--serif);font-weight:600;line-height:1.1;letter-spacing:-.01em;
-  font-size:clamp(11px,2.1vw,17px);
+  font-family:var(--serif);font-weight:600;line-height:1.08;letter-spacing:-.01em;
+  font-size:clamp(9px, calc(var(--lado) * .15), 18px);
   word-break:break-word;hyphens:auto;
 }
 .frente img{width:100%;height:100%;object-fit:cover;position:absolute;inset:0}
 .frente .nom.sobre-foto{
-  position:absolute;left:0;right:0;bottom:0;margin:0;padding:16px 6px 6px;
-  background:linear-gradient(transparent,rgba(0,0,0,.78));color:#fff;font-size:clamp(9px,1.7vw,13px);
+  position:absolute;left:0;right:0;bottom:0;margin:0;padding:14px 4px 5px;
+  background:linear-gradient(transparent,rgba(0,0,0,.78));color:#fff;
+  font-size:clamp(8px, calc(var(--lado) * .12), 14px);
 }
 .carta.hecha .frente{border-color:var(--ac);box-shadow:inset 0 0 0 2px var(--ac)}
 .carta.hecha{cursor:default}
@@ -157,9 +163,16 @@ h1 span{color:var(--ac)}
 @keyframes tiembla{25%{transform:translateX(-4px)}75%{transform:translateX(4px)}}
 
 /* ---------- árbol (firma) ---------- */
-.arbol{border-top:1px solid var(--tinta-3);padding-top:16px}
-.arbol h2{font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--tenue);font-weight:400;margin-bottom:12px}
-.arbol ol{list-style:none;display:flex;flex-direction:column;gap:9px}
+.arbol{border-top:1px solid var(--tinta-3);padding-top:12px}
+.arbol summary{
+  font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--tenue);cursor:pointer;list-style:none;display:flex;align-items:center;gap:8px;
+}
+.arbol summary::-webkit-details-marker{display:none}
+.arbol summary::before{content:"▸";font-size:13px;transition:transform .2s}
+.arbol[open] summary::before{transform:rotate(90deg)}
+.arbol summary b{color:var(--ac);font-weight:700}
+.arbol ol{list-style:none;display:flex;flex-direction:column;gap:9px;margin-top:12px}
 .arbol li{display:flex;align-items:center;gap:10px;font-size:14px;animation:entra .35s ease-out}
 .arbol .n{font-family:var(--mono);font-size:11px;color:var(--tenue);min-width:20px}
 .arbol .lazo{flex:none;width:26px;height:1px;background:var(--ac);position:relative}
@@ -208,6 +221,17 @@ table.tabla tr:nth-child(1) td.pos{color:var(--ac)}
 }
 .guardar input:focus{outline:2px solid var(--ac);border-color:transparent}
 
+/* ---------- móvil: que el tablero quepa entero ---------- */
+@media (max-width:640px){
+  .env{padding:14px 10px 22px}
+  body.jugando header{margin-bottom:10px}
+  body.jugando .marca{font-size:17px}
+  body.jugando header .enlace{display:none}
+  body.jugando .barra{margin-bottom:8px;gap:6px}
+  body.jugando .chip{padding:5px 9px;font-size:11px}
+  body.jugando .pista{font-size:11.5px;margin-bottom:8px}
+}
+
 .oculto{display:none!important}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 </style>
@@ -254,10 +278,10 @@ table.tabla tr:nth-child(1) td.pos{color:var(--ac)}
     </div>
     <p class="pista" id="pista"></p>
     <div class="tablero" id="tablero"></div>
-    <div class="arbol">
-      <h2>Parentescos descubiertos</h2>
+    <details class="arbol" id="arbol">
+      <summary>Parentescos descubiertos <b id="arbolN">0</b></summary>
       <ol id="listaArbol"><li class="vacio">Todavía no has emparejado a nadie.</li></ol>
-    </div>
+    </details>
   </section>
 
   <!-- ======= FIN ======= -->
@@ -298,9 +322,35 @@ table.tabla tr:nth-child(1) td.pos{color:var(--ac)}
 import { MODOS, TAMANOS_PAREJA, TAMANOS_TRIO, cargarPersonas, generarTablero, capacidad, etiquetaRelacion, esDemo, guardarMarca, cargarRanking } from "./db.js";
 
 const $ = s => document.querySelector(s);
-const COLS = { 8:4, 12:4, 16:4, 24:6, 30:6, 15:5, 18:6, 21:7 };
-const COLS_MOVIL = { 8:2, 12:3, 16:4, 24:4, 30:5, 15:3, 18:3, 21:3 };
 const movil = () => window.matchMedia("(max-width:640px)").matches;
+
+/* Ajusta el tablero al hueco REAL de la pantalla (ancho Y alto).
+   Prueba todas las rejillas exactas (cols · filas = nº de cartas) y se queda
+   con la que da la carta más grande sin salirse. Se recalcula al girar el móvil. */
+const GAP = 8;
+function ajustarTablero() {
+  if (!estado || $("#partida").classList.contains("oculto")) return;
+  const n = estado.cartas.length;
+  const tab = $("#tablero");
+  const anchoDisp = tab.clientWidth;
+  const vh = window.visualViewport?.height ?? window.innerHeight;
+  const altoDisp = Math.max(150, vh - tab.getBoundingClientRect().top - 56);  // 56 = margen + resumen plegado
+
+  let mejor = { lado: 0, cols: 2 };
+  for (let cols = 2; cols <= 8; cols++) {
+    if (n % cols) continue;                       // solo rejillas sin huecos
+    const filas = n / cols;
+    const lado = Math.min(
+      (anchoDisp - GAP * (cols - 1)) / cols,
+      (altoDisp - GAP * (filas - 1)) / filas
+    );
+    if (lado > mejor.lado) mejor = { lado, cols };
+  }
+  const lado = Math.floor(Math.min(mejor.lado, 150));
+  tab.style.setProperty("--lado", lado + "px");
+  tab.style.setProperty("--gap", GAP + "px");
+  tab.style.gridTemplateColumns = `repeat(${mejor.cols}, ${lado}px)`;
+}
 
 let personas = {};
 let caps = {};
@@ -352,10 +402,7 @@ function empezar() {
 
   estado = { grupos, cartas, abiertas: [], hechos: 0, intentos: 0, t0: Date.now(), bloqueo: false, timer: null };
 
-  const nCartas = cartas.length;
-  const cols = (movil() ? COLS_MOVIL : COLS)[nCartas] || 4;
   const tab = $("#tablero");
-  tab.style.gridTemplateColumns = `repeat(${cols},1fr)`;
   tab.innerHTML = cartas.map(c => `
     <button class="carta" data-uid="${c.uid}" aria-label="Carta oculta">
       <span class="cara">
@@ -374,9 +421,12 @@ function empezar() {
   $("#chipIntentos").textContent = "0";
   $("#chipTiempo").textContent = "0:00";
   $("#listaArbol").innerHTML = `<li class="vacio">Todavía no has emparejado a nadie.</li>`;
+  $("#arbolN").textContent = "0";
+  $("#arbol").open = !movil();          // en móvil arranca plegado: el tablero manda
   estado.timer = setInterval(() => $("#chipTiempo").textContent = reloj(Date.now() - estado.t0), 1000);
 
   ver("partida");
+  requestAnimationFrame(ajustarTablero);
 }
 
 function voltear(btn) {
@@ -429,6 +479,7 @@ function anotar(grupo) {
                   <span class="lazo"></span>
                   <span><b>${grupo.map(p => p.nombre).join(" · ")}</b> <span class="rel">— ${etiquetaRelacion(modo, grupo)}</span></span>`;
   ol.appendChild(li);
+  $("#arbolN").textContent = ol.children.length;
 }
 
 async function terminar() {
@@ -521,6 +572,7 @@ const barajar = a => { for (let i = a.length - 1; i > 0; i--) { const j = (Math.
 
 function ver(cual) {
   ["portada", "partida", "fin", "ranking"].forEach(s => $("#" + s).classList.toggle("oculto", s !== cual));
+  document.body.classList.toggle("jugando", cual === "partida");
   if (cual !== "partida" && estado?.timer) clearInterval(estado.timer);
   window.scrollTo(0, 0);
 }
@@ -530,11 +582,10 @@ $("#btnJugar").onclick = empezar;
 $("#btnOtra").onclick = empezar;
 $("#btnVolver").onclick = () => ver("portada");
 $("#btnSalir").onclick = () => { clearInterval(estado.timer); ver("portada"); };
-window.addEventListener("resize", () => {
-  if (!estado || $("#partida").classList.contains("oculto")) return;
-  const n = estado.cartas.length;
-  $("#tablero").style.gridTemplateColumns = `repeat(${(movil() ? COLS_MOVIL : COLS)[n] || 4},1fr)`;
-});
+window.addEventListener("resize", ajustarTablero);
+window.addEventListener("orientationchange", () => setTimeout(ajustarTablero, 250));
+window.visualViewport?.addEventListener("resize", ajustarTablero);
+$("#arbol").addEventListener("toggle", ajustarTablero);
 
 if ("serviceWorker" in navigator && location.protocol.startsWith("http"))
   navigator.serviceWorker.register("./sw.js").catch(() => {});
