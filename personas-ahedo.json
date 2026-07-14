@@ -1,0 +1,466 @@
+{
+ "personas": {
+  "emilio_perez": {
+   "nombre": "Emilio Pérez",
+   "sexo": "H",
+   "parejaId": "angelines_benito",
+   "grupoHermanos": "perez_mayores"
+  },
+  "angelines_benito": {
+   "nombre": "Angelines Benito",
+   "sexo": "M",
+   "parejaId": "emilio_perez"
+  },
+  "raul_perez": {
+   "nombre": "Raúl Pérez",
+   "sexo": "H",
+   "padreId": "emilio_perez",
+   "madreId": "angelines_benito",
+   "parejaId": "araceli_sanchez"
+  },
+  "hector_perez": {
+   "nombre": "Héctor Pérez",
+   "sexo": "H",
+   "padreId": "emilio_perez",
+   "madreId": "angelines_benito",
+   "parejaId": "mari_mar_lopez"
+  },
+  "angel_luis_perez": {
+   "nombre": "Ángel Luis Pérez",
+   "sexo": "H",
+   "padreId": "emilio_perez",
+   "madreId": "angelines_benito",
+   "parejaId": "noemi_sanchez"
+  },
+  "araceli_sanchez": {
+   "nombre": "Araceli Sánchez",
+   "sexo": "M",
+   "parejaId": "raul_perez"
+  },
+  "nico_perez": {
+   "nombre": "Nico Pérez",
+   "sexo": "H",
+   "padreId": "raul_perez",
+   "madreId": "araceli_sanchez"
+  },
+  "martin_perez": {
+   "nombre": "Martín Pérez",
+   "sexo": "H",
+   "padreId": "raul_perez",
+   "madreId": "araceli_sanchez"
+  },
+  "yago_perez": {
+   "nombre": "Yago Pérez",
+   "sexo": "H",
+   "padreId": "raul_perez",
+   "madreId": "araceli_sanchez"
+  },
+  "mari_mar_lopez": {
+   "nombre": "Mari Mar López",
+   "sexo": "M",
+   "parejaId": "hector_perez"
+  },
+  "gabri_perez": {
+   "nombre": "Gabri Pérez",
+   "sexo": "H",
+   "padreId": "hector_perez",
+   "madreId": "mari_mar_lopez"
+  },
+  "noemi_sanchez": {
+   "nombre": "Noemí Sánchez",
+   "sexo": "M",
+   "parejaId": "angel_luis_perez"
+  },
+  "samuel_perez": {
+   "nombre": "Samuel Pérez",
+   "sexo": "H",
+   "padreId": "angel_luis_perez",
+   "madreId": "noemi_sanchez"
+  },
+  "daniel_perez": {
+   "nombre": "Daniel Pérez",
+   "sexo": "H",
+   "padreId": "angel_luis_perez",
+   "madreId": "noemi_sanchez"
+  },
+  "jacinto_ortiz": {
+   "nombre": "Jacinto Ortiz",
+   "sexo": "H",
+   "parejaId": "celia_perez"
+  },
+  "celia_perez": {
+   "nombre": "Celia Pérez",
+   "sexo": "M",
+   "parejaId": "jacinto_ortiz",
+   "grupoHermanos": "perez_mayores"
+  },
+  "david_ortiz": {
+   "nombre": "David Ortiz",
+   "sexo": "H",
+   "padreId": "jacinto_ortiz",
+   "madreId": "celia_perez",
+   "parejaId": "sonia_puente"
+  },
+  "cesar_ortiz": {
+   "nombre": "César Ortiz",
+   "sexo": "H",
+   "padreId": "jacinto_ortiz",
+   "madreId": "celia_perez",
+   "parejaId": "yolanda_pena"
+  },
+  "daniel_ortiz": {
+   "nombre": "Daniel Ortiz",
+   "sexo": "H",
+   "padreId": "jacinto_ortiz",
+   "madreId": "celia_perez",
+   "parejaId": "sofia_fernandez"
+  },
+  "sonia_puente": {
+   "nombre": "Sonia Puente",
+   "sexo": "M",
+   "parejaId": "david_ortiz"
+  },
+  "alejandro_ortiz": {
+   "nombre": "Alejandro Ortiz",
+   "sexo": "H",
+   "padreId": "david_ortiz",
+   "madreId": "sonia_puente"
+  },
+  "irene_ortiz": {
+   "nombre": "Irene Ortiz",
+   "sexo": "M",
+   "padreId": "david_ortiz",
+   "madreId": "sonia_puente"
+  },
+  "yolanda_pena": {
+   "nombre": "Yolanda Peña",
+   "sexo": "M",
+   "parejaId": "cesar_ortiz"
+  },
+  "gonzalo_ortiz": {
+   "nombre": "Gonzalo Ortiz",
+   "sexo": "H",
+   "padreId": "cesar_ortiz",
+   "madreId": "yolanda_pena"
+  },
+  "adrian_ortiz": {
+   "nombre": "Adrián Ortiz",
+   "sexo": "H",
+   "padreId": "cesar_ortiz",
+   "madreId": "yolanda_pena"
+  },
+  "sofia_fernandez": {
+   "nombre": "Sofía Fernández",
+   "sexo": "M",
+   "parejaId": "daniel_ortiz"
+  },
+  "vega_ortiz": {
+   "nombre": "Vega Ortiz",
+   "sexo": "M",
+   "padreId": "daniel_ortiz",
+   "madreId": "sofia_fernandez"
+  },
+  "emma_ortiz": {
+   "nombre": "Emma Ortiz",
+   "sexo": "M",
+   "padreId": "daniel_ortiz",
+   "madreId": "sofia_fernandez"
+  },
+  "miguel_macias": {
+   "nombre": "Miguel Macías",
+   "sexo": "H",
+   "parejaId": "merche_perez"
+  },
+  "merche_perez": {
+   "nombre": "Merche Pérez",
+   "sexo": "M",
+   "parejaId": "miguel_macias"
+  },
+  "eva_macias": {
+   "nombre": "Eva Macías",
+   "sexo": "M",
+   "padreId": "miguel_macias",
+   "madreId": "merche_perez",
+   "parejaId": "carlos_fernandez"
+  },
+  "luis_mari_macias": {
+   "nombre": "Luis Mari Macías",
+   "sexo": "H",
+   "padreId": "miguel_macias",
+   "madreId": "merche_perez",
+   "parejaId": "chus"
+  },
+  "sergio_macias": {
+   "nombre": "Sergio Macías",
+   "sexo": "H",
+   "padreId": "miguel_macias",
+   "madreId": "merche_perez"
+  },
+  "carlos_fernandez": {
+   "nombre": "Carlos Fernández",
+   "sexo": "H",
+   "parejaId": "eva_macias"
+  },
+  "naira_fernandez": {
+   "nombre": "Naira Fernández",
+   "sexo": "M",
+   "padreId": "carlos_fernandez",
+   "madreId": "eva_macias"
+  },
+  "alba_fernandez": {
+   "nombre": "Alba Fernández",
+   "sexo": "M",
+   "padreId": "carlos_fernandez",
+   "madreId": "eva_macias"
+  },
+  "chus": {
+   "nombre": "Chus",
+   "sexo": "M",
+   "parejaId": "luis_mari_macias"
+  },
+  "inigo_macias": {
+   "nombre": "Iñigo Macías",
+   "sexo": "H",
+   "padreId": "luis_mari_macias",
+   "madreId": "chus"
+  },
+  "naiara_macias": {
+   "nombre": "Naiara Macías",
+   "sexo": "M",
+   "padreId": "luis_mari_macias",
+   "madreId": "chus"
+  },
+  "aner_macias": {
+   "nombre": "Aner Macías",
+   "sexo": "H",
+   "padreId": "sergio_macias"
+  },
+  "mari_carmen_perez": {
+   "nombre": "Mari Carmen Pérez",
+   "sexo": "M",
+   "parejaId": "jose_manuel_martinez"
+  },
+  "jose_manuel_martinez": {
+   "nombre": "José Manuel Martínez",
+   "sexo": "H",
+   "parejaId": "mari_carmen_perez"
+  },
+  "raul_martinez": {
+   "nombre": "Raúl Martínez",
+   "sexo": "H",
+   "padreId": "jose_manuel_martinez",
+   "madreId": "mari_carmen_perez"
+  },
+  "miriam_martinez": {
+   "nombre": "Miriam Martínez",
+   "sexo": "M",
+   "padreId": "jose_manuel_martinez",
+   "madreId": "mari_carmen_perez"
+  },
+  "mari_cruz_martinez": {
+   "nombre": "Mari Cruz Martínez",
+   "sexo": "M",
+   "parejaId": "jose_gonzalez"
+  },
+  "jose_gonzalez": {
+   "nombre": "José González",
+   "sexo": "H",
+   "parejaId": "mari_cruz_martinez"
+  },
+  "roberto_gonzalez": {
+   "nombre": "Roberto González",
+   "sexo": "H",
+   "padreId": "jose_gonzalez",
+   "madreId": "mari_cruz_martinez",
+   "parejaId": "rocio"
+  },
+  "joseba_gonzalez": {
+   "nombre": "Joseba González",
+   "sexo": "H",
+   "padreId": "jose_gonzalez",
+   "madreId": "mari_cruz_martinez",
+   "parejaId": "marta_moreno"
+  },
+  "aitor_gonzalez": {
+   "nombre": "Aitor González",
+   "sexo": "H",
+   "padreId": "jose_gonzalez",
+   "madreId": "mari_cruz_martinez"
+  },
+  "rocio": {
+   "nombre": "Rocío",
+   "sexo": "M",
+   "parejaId": "roberto_gonzalez"
+  },
+  "marta_gonzalez": {
+   "nombre": "Marta González",
+   "sexo": "M",
+   "padreId": "roberto_gonzalez",
+   "madreId": "rocio"
+  },
+  "luis_gonzalez": {
+   "nombre": "Luis González",
+   "sexo": "H",
+   "padreId": "roberto_gonzalez",
+   "madreId": "rocio"
+  },
+  "marta_moreno": {
+   "nombre": "Marta Moreno",
+   "sexo": "M",
+   "parejaId": "joseba_gonzalez"
+  },
+  "oier_gonzalez": {
+   "nombre": "Oier González",
+   "sexo": "H",
+   "padreId": "joseba_gonzalez",
+   "madreId": "marta_moreno"
+  },
+  "marcelino_criado": {
+   "nombre": "Marcelino Criado",
+   "sexo": "H",
+   "parejaId": "txiki"
+  },
+  "txiki": {
+   "nombre": "Txiki",
+   "sexo": "M",
+   "parejaId": "marcelino_criado"
+  },
+  "yolanda_criado": {
+   "nombre": "Yolanda Criado",
+   "sexo": "M",
+   "padreId": "marcelino_criado",
+   "madreId": "txiki",
+   "parejaId": "inaki"
+  },
+  "javi_txiki": {
+   "nombre": "Javi Txiki",
+   "sexo": "H",
+   "padreId": "marcelino_criado",
+   "madreId": "txiki",
+   "parejaId": "mari_jose"
+  },
+  "mariascen": {
+   "nombre": "Mariascen",
+   "sexo": "M",
+   "padreId": "marcelino_criado",
+   "madreId": "txiki",
+   "parejaId": "rizos"
+  },
+  "inaki": {
+   "nombre": "Iñaki",
+   "sexo": "H",
+   "parejaId": "yolanda_criado"
+  },
+  "inaxio": {
+   "nombre": "Inaxio",
+   "sexo": "H",
+   "padreId": "inaki",
+   "madreId": "yolanda_criado"
+  },
+  "mari_jose": {
+   "nombre": "Mari José",
+   "sexo": "M",
+   "parejaId": "javi_txiki"
+  },
+  "aritz": {
+   "nombre": "Aritz",
+   "sexo": "H",
+   "padreId": "javi_txiki",
+   "madreId": "mari_jose",
+   "parejaId": "andrea"
+  },
+  "urko": {
+   "nombre": "Urko",
+   "sexo": "H",
+   "padreId": "javi_txiki",
+   "madreId": "mari_jose"
+  },
+  "andrea": {
+   "nombre": "Andrea",
+   "sexo": "M",
+   "parejaId": "aritz"
+  },
+  "rizos": {
+   "nombre": "Rizos",
+   "sexo": "H",
+   "parejaId": "mariascen"
+  },
+  "alex": {
+   "nombre": "Álex",
+   "sexo": "H",
+   "padreId": "rizos",
+   "madreId": "mariascen"
+  },
+  "ismael_perez": {
+   "nombre": "Ismael Pérez",
+   "sexo": "H",
+   "parejaId": "juani"
+  },
+  "juani": {
+   "nombre": "Juani",
+   "sexo": "M",
+   "parejaId": "ismael_perez"
+  },
+  "ismaelito": {
+   "nombre": "Ismaelito",
+   "sexo": "H",
+   "padreId": "ismael_perez",
+   "madreId": "juani"
+  },
+  "david_perez": {
+   "nombre": "David Pérez",
+   "sexo": "H",
+   "padreId": "ismael_perez",
+   "madreId": "juani"
+  },
+  "javier_perez": {
+   "nombre": "Javier Pérez",
+   "sexo": "H",
+   "padreId": "ismael_perez",
+   "madreId": "juani",
+   "parejaId": "ana"
+  },
+  "abraham_perez": {
+   "nombre": "Abraham Pérez",
+   "sexo": "H",
+   "padreId": "david_perez"
+  },
+  "luis_perez": {
+   "nombre": "Luis Pérez",
+   "sexo": "H",
+   "padreId": "david_perez"
+  },
+  "ana": {
+   "nombre": "Ana",
+   "sexo": "M",
+   "parejaId": "javier_perez"
+  },
+  "aitana": {
+   "nombre": "Aitana",
+   "sexo": "M",
+   "padreId": "javier_perez",
+   "madreId": "ana"
+  },
+  "sofia": {
+   "nombre": "Sofía",
+   "sexo": "M",
+   "padreId": "javier_perez",
+   "madreId": "ana"
+  },
+  "saturnino_perez": {
+   "nombre": "Saturnino Pérez",
+   "sexo": "H",
+   "grupoHermanos": "perez_mayores"
+  },
+  "miguel_angel_perez": {
+   "nombre": "Miguel Ángel Pérez",
+   "sexo": "H",
+   "grupoHermanos": "perez_mayores"
+  },
+  "maria_jesus_perez": {
+   "nombre": "María Jesús Pérez",
+   "sexo": "M",
+   "grupoHermanos": "perez_mayores"
+  }
+ }
+}

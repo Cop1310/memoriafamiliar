@@ -1,0 +1,543 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#131B33">
+<title>Memoria Familiar</title>
+<link rel="manifest" href="manifest.json">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&family=Inter+Tight:wght@400;500;600&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --tinta:#131B33; --tinta-2:#1B2547; --tinta-3:#26325C;
+  --papel:#F2ECDF; --papel-2:#E2D9C6;
+  --texto:#F2ECDF; --tenue:#8C97BC;
+  --amb:#E5A93C; --verd:#3FB8A0; --viol:#8C7BF2; --rosa:#E8637C; --azul:#54A6EC;
+  --ac:var(--amb);
+  --r:14px;
+  --serif:"Fraunces",Georgia,serif;
+  --sans:"Inter Tight",system-ui,sans-serif;
+  --mono:"Space Mono",monospace;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%}
+body{
+  background:var(--tinta);
+  color:var(--texto);
+  font-family:var(--sans);
+  -webkit-tap-highlight-color:transparent;
+  display:flex;flex-direction:column;
+  min-height:100dvh;
+}
+body::before{
+  content:"";position:fixed;inset:0;pointer-events:none;z-index:0;
+  background:radial-gradient(120% 80% at 50% 0%, rgba(255,255,255,.05), transparent 60%);
+}
+.env{position:relative;z-index:1;width:100%;max-width:1080px;margin:0 auto;padding:20px 16px 32px;flex:1;display:flex;flex-direction:column}
+
+/* ---------- cabecera ---------- */
+header{display:flex;align-items:baseline;justify-content:space-between;gap:12px;margin-bottom:22px}
+.marca{font-family:var(--serif);font-weight:600;font-size:22px;letter-spacing:-.01em}
+.marca em{font-style:normal;color:var(--ac)}
+.enlace{color:var(--tenue);font-size:13px;text-decoration:none;border-bottom:1px solid transparent;padding-bottom:2px}
+.enlace:hover,.enlace:focus-visible{color:var(--papel);border-color:var(--ac)}
+
+/* ---------- portada ---------- */
+.portada{margin:auto 0;display:flex;flex-direction:column;gap:30px}
+h1{font-family:var(--serif);font-weight:700;font-size:clamp(30px,6vw,50px);line-height:1.04;letter-spacing:-.02em;max-width:14ch}
+h1 span{color:var(--ac)}
+.sub{color:var(--tenue);font-size:15px;max-width:46ch;line-height:1.5}
+.bloque{display:flex;flex-direction:column;gap:12px}
+.rotulo{font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--tenue)}
+
+.modos{display:grid;grid-template-columns:repeat(auto-fit,minmax(168px,1fr));gap:10px}
+.modo{
+  --c:var(--ac);
+  text-align:left;background:var(--tinta-2);border:1px solid transparent;color:var(--texto);
+  border-radius:var(--r);padding:14px 15px;cursor:pointer;font:inherit;
+  display:flex;flex-direction:column;gap:5px;transition:background .15s,border-color .15s,transform .15s;
+}
+.modo:hover{background:var(--tinta-3)}
+.modo:focus-visible{outline:2px solid var(--c);outline-offset:2px}
+.modo[aria-pressed="true"]{border-color:var(--c);background:var(--tinta-3)}
+.modo b{font-weight:600;font-size:15px;display:flex;align-items:center;gap:8px}
+.modo b::before{content:"";width:8px;height:8px;border-radius:50%;background:var(--c);flex:none}
+.modo small{color:var(--tenue);font-size:12px;line-height:1.4}
+.modo.personal{--c:var(--amb)} .modo.hermanos{--c:var(--verd)} .modo.padrehijo{--c:var(--viol)}
+.modo.pareja{--c:var(--rosa)} .modo.trio{--c:var(--azul)}
+.modo[disabled]{opacity:.35;cursor:not-allowed}
+
+.tallas{display:flex;flex-wrap:wrap;gap:8px}
+.talla{
+  background:transparent;border:1px solid var(--tinta-3);color:var(--texto);
+  border-radius:999px;padding:9px 16px;cursor:pointer;font:inherit;font-size:14px;
+  transition:border-color .15s,background .15s;
+}
+.talla:hover:not([disabled]){border-color:var(--ac)}
+.talla[aria-pressed="true"]{background:var(--ac);border-color:var(--ac);color:var(--tinta);font-weight:600}
+.talla[disabled]{opacity:.3;cursor:not-allowed;text-decoration:line-through}
+.talla:focus-visible{outline:2px solid var(--ac);outline-offset:2px}
+.talla span{font-family:var(--mono);font-size:11px;opacity:.65;margin-left:6px}
+
+.jugar{
+  background:var(--ac);color:var(--tinta);border:0;border-radius:var(--r);
+  padding:16px 28px;font:inherit;font-weight:600;font-size:16px;cursor:pointer;
+  align-self:flex-start;transition:filter .15s,transform .1s;
+}
+.jugar:hover{filter:brightness(1.08)} .jugar:active{transform:translateY(1px)}
+.jugar:focus-visible{outline:2px solid var(--papel);outline-offset:3px}
+.jugar[disabled]{opacity:.35;cursor:not-allowed}
+.aviso{color:var(--rosa);font-size:13px}
+
+/* ---------- partida ---------- */
+.barra{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:16px}
+.chip{
+  font-family:var(--mono);font-size:12px;letter-spacing:.04em;
+  background:var(--tinta-2);border-radius:999px;padding:7px 13px;color:var(--tenue);
+}
+.chip b{color:var(--papel);font-weight:700}
+.chip.modo-actual{background:transparent;border:1px solid var(--ac);color:var(--ac)}
+.barra .salir{margin-left:auto;background:none;border:0;color:var(--tenue);font:inherit;font-size:13px;cursor:pointer;text-decoration:underline;text-underline-offset:3px}
+.barra .salir:hover{color:var(--papel)}
+
+.pista{color:var(--tenue);font-size:13px;margin-bottom:14px}
+
+.tablero{display:grid;gap:clamp(6px,1.4vw,11px);margin-bottom:22px}
+.carta{
+  aspect-ratio:3/4;perspective:900px;background:none;border:0;padding:0;cursor:pointer;font:inherit;
+}
+.carta:focus-visible{outline:2px solid var(--ac);outline-offset:3px;border-radius:calc(var(--r) - 2px)}
+.cara{
+  position:relative;width:100%;height:100%;transform-style:preserve-3d;
+  transition:transform .42s cubic-bezier(.4,.1,.2,1);
+}
+.carta.abierta .cara,.carta.hecha .cara{transform:rotateY(180deg)}
+.dorso,.frente{
+  position:absolute;inset:0;backface-visibility:hidden;border-radius:var(--r);
+  display:flex;align-items:center;justify-content:center;overflow:hidden;
+}
+.dorso{
+  background:var(--tinta-2);
+  border:1px solid var(--tinta-3);
+  background-image:repeating-linear-gradient(135deg,transparent 0 7px,rgba(255,255,255,.028) 7px 8px);
+}
+.dorso::after{
+  content:"";width:26%;aspect-ratio:1;border-radius:50%;
+  border:1.5px solid var(--ac);opacity:.5;
+}
+.frente{
+  transform:rotateY(180deg);
+  background:var(--papel);color:var(--tinta);
+  border:1px solid var(--papel-2);
+  flex-direction:column;gap:6px;padding:8px;text-align:center;
+}
+.frente .nom{
+  font-family:var(--serif);font-weight:600;line-height:1.1;letter-spacing:-.01em;
+  font-size:clamp(11px,2.1vw,17px);
+  word-break:break-word;hyphens:auto;
+}
+.frente img{width:100%;height:100%;object-fit:cover;position:absolute;inset:0}
+.frente .nom.sobre-foto{
+  position:absolute;left:0;right:0;bottom:0;margin:0;padding:16px 6px 6px;
+  background:linear-gradient(transparent,rgba(0,0,0,.78));color:#fff;font-size:clamp(9px,1.7vw,13px);
+}
+.carta.hecha .frente{border-color:var(--ac);box-shadow:inset 0 0 0 2px var(--ac)}
+.carta.hecha{cursor:default}
+.carta.fallo .frente{animation:tiembla .34s}
+@keyframes tiembla{25%{transform:translateX(-4px)}75%{transform:translateX(4px)}}
+
+/* ---------- árbol (firma) ---------- */
+.arbol{border-top:1px solid var(--tinta-3);padding-top:16px}
+.arbol h2{font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--tenue);font-weight:400;margin-bottom:12px}
+.arbol ol{list-style:none;display:flex;flex-direction:column;gap:9px}
+.arbol li{display:flex;align-items:center;gap:10px;font-size:14px;animation:entra .35s ease-out}
+.arbol .n{font-family:var(--mono);font-size:11px;color:var(--tenue);min-width:20px}
+.arbol .lazo{flex:none;width:26px;height:1px;background:var(--ac);position:relative}
+.arbol .lazo::before,.arbol .lazo::after{content:"";position:absolute;top:-2px;width:5px;height:5px;border-radius:50%;background:var(--ac)}
+.arbol .lazo::before{left:0} .arbol .lazo::after{right:0}
+.arbol .rel{color:var(--tenue)}
+.arbol .vacio{color:var(--tenue);font-size:13px;font-style:italic}
+@keyframes entra{from{opacity:0;transform:translateY(-5px)}to{opacity:1;transform:none}}
+
+/* ---------- fin ---------- */
+.fin{margin:auto 0;text-align:center;display:flex;flex-direction:column;align-items:center;gap:18px}
+.fin h1{max-width:none}
+.marca-grande{font-family:var(--mono);font-size:15px;color:var(--tenue)}
+.marca-grande b{color:var(--ac);font-size:26px}
+.record{color:var(--amb);font-size:14px}
+.acciones{display:flex;gap:10px;flex-wrap:wrap;justify-content:center}
+.sec{background:transparent;border:1px solid var(--tinta-3);color:var(--texto);border-radius:var(--r);padding:16px 24px;font:inherit;cursor:pointer}
+.sec:hover{border-color:var(--ac)}
+
+/* ---------- ranking ---------- */
+.rank{margin:auto 0;display:flex;flex-direction:column;gap:20px}
+.rank .cabecera{display:flex;align-items:baseline;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.rank h1{font-size:clamp(26px,5vw,38px);max-width:none}
+.rank .sel{display:flex;gap:8px;flex-wrap:wrap}
+.rank select{background:var(--tinta-2);border:1px solid var(--tinta-3);color:var(--texto);border-radius:9px;padding:9px 11px;font:inherit;font-size:14px}
+.rank select:focus{outline:2px solid var(--ac)}
+table.tabla{width:100%;border-collapse:collapse}
+table.tabla th{
+  text-align:left;font-family:var(--mono);font-size:10px;letter-spacing:.12em;text-transform:uppercase;
+  color:var(--tenue);font-weight:400;padding:0 10px 10px;border-bottom:1px solid var(--tinta-3);
+}
+table.tabla td{padding:12px 10px;border-bottom:1px solid rgba(38,50,92,.55);font-size:15px}
+table.tabla td.pos{font-family:var(--mono);color:var(--tenue);width:44px}
+table.tabla td.jug{font-family:var(--serif);font-weight:600}
+table.tabla td.t{font-family:var(--mono);font-weight:700;text-align:right;color:var(--ac)}
+table.tabla td.i{font-family:var(--mono);font-size:13px;color:var(--tenue);text-align:right;width:80px}
+table.tabla tr.yo td{background:var(--tinta-2)}
+table.tabla tr:nth-child(1) td.pos{color:var(--ac)}
+.rank .vacio{color:var(--tenue);font-style:italic;padding:22px 10px}
+
+/* guardar marca */
+.guardar{display:flex;gap:8px;align-items:center;flex-wrap:wrap;justify-content:center}
+.guardar input{
+  background:var(--tinta-2);border:1px solid var(--tinta-3);color:var(--texto);
+  border-radius:var(--r);padding:15px 16px;font:inherit;font-size:15px;min-width:220px;text-align:center;
+}
+.guardar input:focus{outline:2px solid var(--ac);border-color:transparent}
+
+.oculto{display:none!important}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<div class="env">
+  <header>
+    <div class="marca">Memoria <em>Familiar</em></div>
+    <a class="enlace" href="admin.html">Administrar personas</a>
+  </header>
+
+  <!-- ======= PORTADA ======= -->
+  <section id="portada" class="portada">
+    <div>
+      <h1>¿Sabes quién es <span>de quién</span>?</h1>
+      <p class="sub">Voltea las cartas y empareja a las personas por su parentesco. Sin fotos: aquí solo valen los nombres y lo que sepas de la familia.</p>
+    </div>
+
+    <div class="bloque">
+      <span class="rotulo">1 · Tipo de partida</span>
+      <div class="modos" id="modos"></div>
+    </div>
+
+    <div class="bloque">
+      <span class="rotulo">2 · Tamaño del tablero</span>
+      <div class="tallas" id="tallas"></div>
+      <p class="aviso oculto" id="aviso"></p>
+    </div>
+
+    <div class="acciones" style="justify-content:flex-start">
+      <button class="jugar" id="btnJugar">Empezar partida</button>
+      <button class="sec" id="btnVerRanking">Ver ranking</button>
+    </div>
+  </section>
+
+  <!-- ======= PARTIDA ======= -->
+  <section id="partida" class="oculto">
+    <div class="barra">
+      <span class="chip modo-actual" id="chipModo"></span>
+      <span class="chip">Aciertos <b id="chipAciertos">0</b></span>
+      <span class="chip">Intentos <b id="chipIntentos">0</b></span>
+      <span class="chip">Tiempo <b id="chipTiempo">0:00</b></span>
+      <button class="salir" id="btnSalir">Salir</button>
+    </div>
+    <p class="pista" id="pista"></p>
+    <div class="tablero" id="tablero"></div>
+    <div class="arbol">
+      <h2>Parentescos descubiertos</h2>
+      <ol id="listaArbol"><li class="vacio">Todavía no has emparejado a nadie.</li></ol>
+    </div>
+  </section>
+
+  <!-- ======= FIN ======= -->
+  <section id="fin" class="fin oculto">
+    <h1>Tablero completo</h1>
+    <p class="marca-grande"><b id="finTiempo">0:00</b> · <b id="finIntentos">0</b> intentos</p>
+    <p class="record oculto" id="finRecord"></p>
+
+    <div class="guardar" id="zonaGuardar">
+      <input id="fJugador" maxlength="24" placeholder="Tu nombre" autocomplete="name">
+      <button class="jugar" id="btnGuardarMarca">Guardar en el ranking</button>
+    </div>
+
+    <div class="acciones">
+      <button class="sec" id="btnOtra">Otra partida igual</button>
+      <button class="sec" id="btnVolver">Cambiar de modo</button>
+    </div>
+  </section>
+
+  <!-- ======= RANKING ======= -->
+  <section id="ranking" class="rank oculto">
+    <div class="cabecera">
+      <h1>Ranking</h1>
+      <div class="sel">
+        <select id="rkModo"></select>
+        <select id="rkTalla"></select>
+      </div>
+    </div>
+    <p class="sub">Ordenado por tiempo. Los intentos solo desempatan. Cada tipo de partida y cada tamaño tienen su propia clasificación.</p>
+    <div id="rkCuerpo"></div>
+    <div class="acciones" style="justify-content:flex-start">
+      <button class="sec" id="btnRkVolver">← Volver</button>
+    </div>
+  </section>
+</div>
+
+<script type="module">
+import { MODOS, TAMANOS_PAREJA, TAMANOS_TRIO, cargarPersonas, generarTablero, capacidad, etiquetaRelacion, esDemo, guardarMarca, cargarRanking } from "./db.js";
+
+const $ = s => document.querySelector(s);
+const COLS = { 8:4, 12:4, 16:4, 24:6, 30:6, 15:5, 18:6, 21:7 };
+const COLS_MOVIL = { 8:2, 12:3, 16:4, 24:4, 30:5, 15:3, 18:3, 21:3 };
+const movil = () => window.matchMedia("(max-width:640px)").matches;
+
+let personas = {};
+let caps = {};
+let modo = "personal";
+let nGrupos = 4;
+let estado = null;
+
+/* ---------- portada ---------- */
+function pintarModos() {
+  $("#modos").innerHTML = Object.entries(MODOS).map(([k, m]) => `
+    <button class="modo ${k}" data-modo="${k}" aria-pressed="${k === modo}" ${caps[k] < (k === "trio" ? 5 : 4) ? "disabled" : ""}>
+      <b>${m.etiqueta}</b>
+      <small>${caps[k] ? `hasta ${caps[k]} ${m.grupo === 3 ? "tríos" : "parejas"}` : "sin datos suficientes"}</small>
+    </button>`).join("");
+  $("#modos").querySelectorAll(".modo").forEach(b =>
+    b.onclick = () => { modo = b.dataset.modo; aplicarColor(); pintarModos(); pintarTallas(); });
+}
+
+function pintarTallas() {
+  const m = MODOS[modo];
+  const lista = m.grupo === 3 ? TAMANOS_TRIO : TAMANOS_PAREJA;
+  const max = caps[modo] || 0;
+  if (!lista.includes(nGrupos) || nGrupos > max) nGrupos = [...lista].reverse().find(n => n <= max) ?? lista[0];
+
+  $("#tallas").innerHTML = lista.map(n => `
+    <button class="talla" data-n="${n}" aria-pressed="${n === nGrupos}" ${n > max ? "disabled" : ""}>
+      ${n} ${m.grupo === 3 ? "tríos" : "parejas"}<span>${n * m.grupo} cartas</span>
+    </button>`).join("");
+  $("#tallas").querySelectorAll(".talla").forEach(b =>
+    b.onclick = () => { nGrupos = +b.dataset.n; pintarTallas(); });
+
+  const posible = max >= (m.grupo === 3 ? 5 : 4);
+  $("#btnJugar").disabled = !posible;
+  $("#aviso").classList.toggle("oculto", posible);
+  $("#aviso").textContent = posible ? "" :
+    `La base de datos solo permite ${max} ${m.grupo === 3 ? "tríos" : "parejas"} en este modo. Añade personas desde Administrar.`;
+}
+
+const aplicarColor = () => document.documentElement.style.setProperty("--ac", `var(--${MODOS[modo].color})`);
+
+/* ---------- partida ---------- */
+function empezar() {
+  const grupos = generarTablero(modo, nGrupos, personas);
+  if (!grupos) { $("#aviso").classList.remove("oculto"); $("#aviso").textContent = "No se ha podido montar un tablero válido con estos datos. Prueba con menos parejas."; return; }
+
+  const cartas = [];
+  grupos.forEach((g, i) => g.forEach((p, j) => cartas.push({ uid: `${i}-${j}`, grupo: i, persona: p })));
+  barajar(cartas);
+
+  estado = { grupos, cartas, abiertas: [], hechos: 0, intentos: 0, t0: Date.now(), bloqueo: false, timer: null };
+
+  const nCartas = cartas.length;
+  const cols = (movil() ? COLS_MOVIL : COLS)[nCartas] || 4;
+  const tab = $("#tablero");
+  tab.style.gridTemplateColumns = `repeat(${cols},1fr)`;
+  tab.innerHTML = cartas.map(c => `
+    <button class="carta" data-uid="${c.uid}" aria-label="Carta oculta">
+      <span class="cara">
+        <span class="dorso"></span>
+        <span class="frente">
+          ${c.persona.foto ? `<img src="${c.persona.foto}" alt=""><span class="nom sobre-foto">${c.persona.nombre}</span>`
+                           : `<span class="nom">${c.persona.nombre}</span>`}
+        </span>
+      </span>
+    </button>`).join("");
+  tab.querySelectorAll(".carta").forEach(b => b.onclick = () => voltear(b));
+
+  $("#chipModo").textContent = MODOS[modo].etiqueta;
+  $("#pista").textContent = MODOS[modo].pista;
+  $("#chipAciertos").textContent = "0";
+  $("#chipIntentos").textContent = "0";
+  $("#chipTiempo").textContent = "0:00";
+  $("#listaArbol").innerHTML = `<li class="vacio">Todavía no has emparejado a nadie.</li>`;
+  estado.timer = setInterval(() => $("#chipTiempo").textContent = reloj(Date.now() - estado.t0), 1000);
+
+  ver("partida");
+}
+
+function voltear(btn) {
+  if (estado.bloqueo) return;
+  const uid = btn.dataset.uid;
+  if (btn.classList.contains("hecha") || btn.classList.contains("abierta")) return;
+
+  btn.classList.add("abierta");
+  const carta = estado.cartas.find(c => c.uid === uid);
+  btn.setAttribute("aria-label", carta.persona.nombre);
+  estado.abiertas.push({ btn, carta });
+
+  const n = MODOS[modo].grupo;
+  if (estado.abiertas.length < n) return;
+
+  estado.intentos++;
+  $("#chipIntentos").textContent = estado.intentos;
+  const g = estado.abiertas[0].carta.grupo;
+  const acierto = estado.abiertas.every(a => a.carta.grupo === g);
+
+  estado.bloqueo = true;
+  if (acierto) {
+    setTimeout(() => {
+      estado.abiertas.forEach(a => { a.btn.classList.remove("abierta"); a.btn.classList.add("hecha"); });
+      estado.hechos++;
+      $("#chipAciertos").textContent = estado.hechos;
+      anotar(estado.grupos[g]);
+      estado.abiertas = [];
+      estado.bloqueo = false;
+      if (estado.hechos === nGrupos) terminar();
+    }, 380);
+  } else {
+    estado.abiertas.forEach(a => a.btn.classList.add("fallo"));
+    setTimeout(() => {
+      estado.abiertas.forEach(a => {
+        a.btn.classList.remove("abierta", "fallo");
+        a.btn.setAttribute("aria-label", "Carta oculta");
+      });
+      estado.abiertas = [];
+      estado.bloqueo = false;
+    }, 1050);
+  }
+}
+
+function anotar(grupo) {
+  const ol = $("#listaArbol");
+  ol.querySelector(".vacio")?.remove();
+  const li = document.createElement("li");
+  li.innerHTML = `<span class="n">${String(ol.children.length + 1).padStart(2, "0")}</span>
+                  <span class="lazo"></span>
+                  <span><b>${grupo.map(p => p.nombre).join(" · ")}</b> <span class="rel">— ${etiquetaRelacion(modo, grupo)}</span></span>`;
+  ol.appendChild(li);
+}
+
+async function terminar() {
+  clearInterval(estado.timer);
+  const seg = Math.max(1, Math.round((Date.now() - estado.t0) / 1000));
+  estado.seg = seg;
+  estado.guardada = false;
+  $("#finIntentos").textContent = estado.intentos;
+  $("#finTiempo").textContent = reloj(seg * 1000);
+
+  $("#zonaGuardar").classList.remove("oculto");
+  $("#btnGuardarMarca").disabled = false;
+  $("#btnGuardarMarca").textContent = "Guardar en el ranking";
+  $("#fJugador").value = leerJugador();
+  $("#finRecord").classList.add("oculto");
+  ver("fin");
+
+  // ¿entra en el top del tablero?
+  try {
+    const r = await cargarRanking(modo, nGrupos);
+    const puesto = r.filter(m => m.seg < seg || (m.seg === seg && m.intentos < estado.intentos)).length + 1;
+    if (puesto <= 3 || r.length === 0) {
+      $("#finRecord").textContent = `Entras en el puesto ${puesto} de este tablero`;
+      $("#finRecord").classList.remove("oculto");
+    }
+  } catch (e) {}
+}
+
+const leerJugador = () => { try { return localStorage.getItem("memoriaFamiliar.jugador") || ""; } catch (e) { return ""; } };
+
+$("#btnGuardarMarca").onclick = async () => {
+  const jugador = $("#fJugador").value.trim();
+  if (!jugador) { $("#fJugador").focus(); return; }
+  if (estado.guardada) return;
+  try { localStorage.setItem("memoriaFamiliar.jugador", jugador); } catch (e) {}
+  $("#btnGuardarMarca").disabled = true;
+  $("#btnGuardarMarca").textContent = "Guardando…";
+  await guardarMarca(modo, nGrupos, { jugador, seg: estado.seg, intentos: estado.intentos });
+  estado.guardada = true;
+  $("#zonaGuardar").classList.add("oculto");
+  rkModo = modo; rkTalla = nGrupos; rkVuelvoA = "fin";
+  abrirRanking(jugador);
+};
+
+/* ---------- ranking ---------- */
+let rkModo = "personal", rkTalla = 4, rkVuelvoA = "portada";
+
+function abrirRanking(destacar = null) {
+  $("#rkModo").innerHTML = Object.entries(MODOS).map(([k, m]) =>
+    `<option value="${k}" ${k === rkModo ? "selected" : ""}>${m.etiqueta}</option>`).join("");
+  pintarTallasRanking();
+  cargarTabla(destacar);
+  ver("ranking");
+}
+
+function pintarTallasRanking() {
+  const lista = MODOS[rkModo].grupo === 3 ? TAMANOS_TRIO : TAMANOS_PAREJA;
+  if (!lista.includes(rkTalla)) rkTalla = lista[0];
+  $("#rkTalla").innerHTML = lista.map(n =>
+    `<option value="${n}" ${n === rkTalla ? "selected" : ""}>${n} ${MODOS[rkModo].grupo === 3 ? "tríos" : "parejas"}</option>`).join("");
+}
+
+async function cargarTabla(destacar = null) {
+  document.documentElement.style.setProperty("--ac", `var(--${MODOS[rkModo].color})`);
+  $("#rkCuerpo").innerHTML = `<p class="vacio">Cargando…</p>`;
+  let marcas = [];
+  try { marcas = await cargarRanking(rkModo, rkTalla); } catch (e) {}
+  if (!marcas.length) {
+    $("#rkCuerpo").innerHTML = `<p class="vacio">Nadie ha completado todavía este tablero. Sé el primero.</p>`;
+    return;
+  }
+  $("#rkCuerpo").innerHTML = `<table class="tabla">
+    <thead><tr><th></th><th>Jugador</th><th style="text-align:right">Intentos</th><th style="text-align:right">Tiempo</th></tr></thead>
+    <tbody>${marcas.map((m, i) => `
+      <tr class="${destacar && m.jugador === destacar && m.seg === estado?.seg ? "yo" : ""}">
+        <td class="pos">${String(i + 1).padStart(2, "0")}</td>
+        <td class="jug">${m.jugador}</td>
+        <td class="i">${m.intentos}</td>
+        <td class="t">${reloj(m.seg * 1000)}</td>
+      </tr>`).join("")}</tbody></table>`;
+}
+
+$("#rkModo").onchange = e => { rkModo = e.target.value; pintarTallasRanking(); cargarTabla(); };
+$("#rkTalla").onchange = e => { rkTalla = +e.target.value; cargarTabla(); };
+$("#btnVerRanking").onclick = () => { rkModo = modo; rkTalla = nGrupos; rkVuelvoA = "portada"; abrirRanking(); };
+$("#btnRkVolver").onclick = () => { aplicarColor(); ver(rkVuelvoA); };
+
+const reloj = ms => { const s = Math.floor(ms / 1000); return `${Math.floor(s / 60)}:${String(s % 60).padStart(2, "0")}`; };
+const barajar = a => { for (let i = a.length - 1; i > 0; i--) { const j = (Math.random() * (i + 1)) | 0;[a[i], a[j]] = [a[j], a[i]]; } };
+
+function ver(cual) {
+  ["portada", "partida", "fin", "ranking"].forEach(s => $("#" + s).classList.toggle("oculto", s !== cual));
+  if (cual !== "partida" && estado?.timer) clearInterval(estado.timer);
+  window.scrollTo(0, 0);
+}
+
+/* ---------- arranque ---------- */
+$("#btnJugar").onclick = empezar;
+$("#btnOtra").onclick = empezar;
+$("#btnVolver").onclick = () => ver("portada");
+$("#btnSalir").onclick = () => { clearInterval(estado.timer); ver("portada"); };
+window.addEventListener("resize", () => {
+  if (!estado || $("#partida").classList.contains("oculto")) return;
+  const n = estado.cartas.length;
+  $("#tablero").style.gridTemplateColumns = `repeat(${(movil() ? COLS_MOVIL : COLS)[n] || 4},1fr)`;
+});
+
+if ("serviceWorker" in navigator && location.protocol.startsWith("http"))
+  navigator.serviceWorker.register("./sw.js").catch(() => {});
+
+(async () => {
+  personas = await cargarPersonas();
+  Object.keys(MODOS).forEach(k => caps[k] = capacidad(k, personas));
+  aplicarColor(); pintarModos(); pintarTallas();
+  if (esDemo()) $(".sub").insertAdjacentHTML("afterend",
+    `<p class="sub" style="color:var(--amb)">Modo demo: estás jugando con datos de ejemplo. Rellena <code>FIREBASE_CONFIG</code> en <code>db.js</code> para usar tu base de datos real.</p>`);
+})();
+</script>
+</body>
+</html>

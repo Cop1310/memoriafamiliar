@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#131B33">
+<title>Administrar personas · Memoria Familiar</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&family=Inter+Tight:wght@400;500;600&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --tinta:#131B33; --tinta-2:#1B2547; --tinta-3:#26325C;
+  --papel:#F2ECDF; --texto:#F2ECDF; --tenue:#8C97BC;
+  --amb:#E5A93C; --verd:#3FB8A0; --viol:#8C7BF2; --rosa:#E8637C; --azul:#54A6EC;
+  --r:12px; --serif:"Fraunces",Georgia,serif; --sans:"Inter Tight",system-ui,sans-serif; --mono:"Space Mono",monospace;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--tinta);color:var(--texto);font-family:var(--sans);min-height:100dvh}
+.env{max-width:1080px;margin:0 auto;padding:20px 16px 60px}
+header{display:flex;align-items:baseline;justify-content:space-between;gap:12px;margin-bottom:24px}
+.marca{font-family:var(--serif);font-weight:600;font-size:22px}
+.marca em{font-style:normal;color:var(--amb)}
+a.enlace{color:var(--tenue);font-size:13px;text-decoration:none;border-bottom:1px solid transparent;padding-bottom:2px}
+a.enlace:hover{color:var(--papel);border-color:var(--amb)}
+h1{font-family:var(--serif);font-size:30px;font-weight:700;letter-spacing:-.02em;margin-bottom:6px}
+.sub{color:var(--tenue);font-size:14px;margin-bottom:24px}
+
+/* capacidad */
+.caps{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px;margin-bottom:30px}
+.cap{background:var(--tinta-2);border-radius:var(--r);padding:14px;border-left:3px solid var(--c)}
+.cap.personal{--c:var(--amb)} .cap.hermanos{--c:var(--verd)} .cap.padrehijo{--c:var(--viol)}
+.cap.pareja{--c:var(--rosa)} .cap.trio{--c:var(--azul)}
+.cap .n{font-family:var(--mono);font-size:26px;font-weight:700;color:var(--c)}
+.cap .t{font-size:12px;color:var(--tenue);margin-top:2px}
+.cap .max{font-size:11px;color:var(--tenue);opacity:.7;font-family:var(--mono);margin-top:4px}
+
+.cols{display:grid;grid-template-columns:360px 1fr;gap:24px;align-items:start}
+@media(max-width:820px){.cols{grid-template-columns:1fr}}
+
+/* formulario */
+form{background:var(--tinta-2);border-radius:var(--r);padding:18px;display:flex;flex-direction:column;gap:13px;position:sticky;top:20px}
+form h2{font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--tenue);font-weight:400}
+label{display:flex;flex-direction:column;gap:5px;font-size:13px;color:var(--tenue)}
+input,select{
+  background:var(--tinta);border:1px solid var(--tinta-3);color:var(--texto);
+  border-radius:9px;padding:10px 11px;font:inherit;font-size:14px;
+}
+input:focus,select:focus{outline:2px solid var(--amb);outline-offset:0;border-color:transparent}
+.fila{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.foto-zona{display:flex;align-items:center;gap:12px}
+.foto-prev{width:56px;height:56px;border-radius:9px;background:var(--tinta);border:1px dashed var(--tinta-3);flex:none;object-fit:cover;display:block}
+.botones{display:flex;gap:8px;margin-top:4px}
+button{font:inherit;cursor:pointer;border-radius:9px;border:0;padding:11px 16px;font-size:14px}
+.pri{background:var(--amb);color:var(--tinta);font-weight:600;flex:1}
+.sec{background:transparent;border:1px solid var(--tinta-3);color:var(--texto)}
+.sec:hover{border-color:var(--amb)}
+.mini{padding:6px 10px;font-size:12px}
+.err{color:var(--rosa);font-size:13px;min-height:1em}
+
+/* lista */
+.buscador{width:100%;margin-bottom:12px}
+table{width:100%;border-collapse:collapse;font-size:14px}
+th{text-align:left;font-family:var(--mono);font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--tenue);font-weight:400;padding:0 10px 9px;border-bottom:1px solid var(--tinta-3)}
+td{padding:11px 10px;border-bottom:1px solid rgba(38,50,92,.5);vertical-align:middle}
+tr:hover td{background:var(--tinta-2)}
+td.nom{font-family:var(--serif);font-weight:600;font-size:15px}
+td.rel{color:var(--tenue);font-size:12.5px;line-height:1.45}
+td.acc{text-align:right;white-space:nowrap}
+.vacio{color:var(--tenue);font-style:italic;padding:24px 10px}
+.nota{margin-top:26px;padding:14px 16px;border-radius:var(--r);background:var(--tinta-2);border-left:3px solid var(--amb);font-size:13px;color:var(--tenue);line-height:1.55}
+.nota b{color:var(--papel)}
+</style>
+</head>
+<body>
+<div class="env">
+  <header>
+    <div class="marca">Memoria <em>Familiar</em></div>
+    <a class="enlace" href="index.html">← Volver al juego</a>
+  </header>
+
+  <h1>Administrar personas</h1>
+  <p class="sub">Introduce solo <b>padre, madre y pareja</b>. Los hermanos y los hijos se deducen solos: no hay que teclearlos y así no pueden quedar incoherentes.</p>
+
+  <div class="caps" id="caps"></div>
+
+  <div class="cols">
+    <form id="form" autocomplete="off">
+      <h2 id="tituloForm">Nueva persona</h2>
+      <input type="hidden" id="fId">
+      <label>Nombre completo
+        <input id="fNombre" required placeholder="Lucía Ruiz">
+      </label>
+      <label>Sexo
+        <select id="fSexo">
+          <option value="H">Hombre</option>
+          <option value="M">Mujer</option>
+        </select>
+      </label>
+      <div class="fila">
+        <label>Padre <select id="fPadre"></select></label>
+        <label>Madre <select id="fMadre"></select></label>
+      </div>
+      <label>Pareja <select id="fPareja"></select></label>
+      <label>Grupo de hermanos <span style="opacity:.6">(solo si sus padres no están dados de alta)</span>
+        <input id="fGrupo" placeholder="p. ej. perez_mayores" list="gruposExistentes">
+        <datalist id="gruposExistentes"></datalist>
+      </label>
+      <label>Foto <span style="opacity:.6">(opcional)</span>
+        <div class="foto-zona">
+          <img class="foto-prev" id="fPrev" alt="">
+          <input type="file" id="fFoto" accept="image/*" style="display:none">
+          <button type="button" class="sec mini" id="btnFoto">Elegir imagen</button>
+          <button type="button" class="sec mini" id="btnQuitaFoto">Quitar</button>
+        </div>
+      </label>
+      <p class="err" id="err"></p>
+      <div class="botones">
+        <button type="submit" class="pri" id="btnGuardar">Guardar persona</button>
+        <button type="button" class="sec" id="btnCancelar">Cancelar</button>
+      </div>
+    </form>
+
+    <div>
+      <input class="buscador" id="buscar" placeholder="Buscar por nombre…">
+      <table>
+        <thead><tr><th>Persona</th><th>Parentescos</th><th></th></tr></thead>
+        <tbody id="lista"></tbody>
+      </table>
+      <p class="nota" id="nota"></p>
+    </div>
+  </div>
+</div>
+
+<script type="module">
+import { MODOS, cargarPersonas, guardarPersona, borrarPersona, nuevoId, capacidad, esDemo, sonHermanos } from "./db.js";
+
+const $ = s => document.querySelector(s);
+let personas = {};
+let fotoActual = null;
+
+const lista = () => Object.entries(personas).map(([id, p]) => ({ id, ...p })).sort((a, b) => a.nombre.localeCompare(b.nombre, "es"));
+const nom = id => personas[id]?.nombre || "";
+
+/* ---------- capacidad ---------- */
+function pintarCaps() {
+  $("#caps").innerHTML = Object.entries(MODOS).map(([k, m]) => {
+    const c = capacidad(k, personas);
+    const min = m.grupo === 3 ? 5 : 4;
+    const max = m.grupo === 3 ? 7 : 15;
+    return `<div class="cap ${k}">
+      <div class="n">${c}</div>
+      <div class="t">${m.etiqueta}</div>
+      <div class="max">${c < min ? `faltan ${min - c} para jugar` : c >= max ? "tablero máximo ✓" : `máx. tablero: ${[4,6,8,12,15].filter(n=>n<=c).pop() ?? c} ${m.grupo===3?"tríos":"parejas"}`}</div>
+    </div>`;
+  }).join("");
+}
+
+/* ---------- selects ---------- */
+function pintarSelects(excluir = null) {
+  const opts = extra => `<option value="">— ninguno —</option>` +
+    lista().filter(p => p.id !== excluir && (!extra || extra(p)))
+           .map(p => `<option value="${p.id}">${p.nombre}</option>`).join("");
+  $("#fPadre").innerHTML = opts(p => p.sexo === "H");
+  $("#fMadre").innerHTML = opts(p => p.sexo === "M");
+  $("#fPareja").innerHTML = opts();
+}
+
+/* ---------- lista ---------- */
+function pintarLista() {
+  const q = $("#buscar").value.trim().toLowerCase();
+  const filas = lista().filter(p => !q || p.nombre.toLowerCase().includes(q));
+  if (!filas.length) { $("#lista").innerHTML = `<tr><td colspan="3" class="vacio">No hay nadie todavía. Empieza por los abuelos: sin padres, solo pareja.</td></tr>`; return; }
+
+  $("#lista").innerHTML = filas.map(p => {
+    const hijos = lista().filter(h => h.padreId === p.id || h.madreId === p.id).map(h => h.nombre);
+    const herm = lista().filter(h => sonHermanos({ ...p }, { ...h })).map(h => h.nombre);
+    const partes = [];
+    if (p.padreId || p.madreId) partes.push(`Hijo/a de <b>${[nom(p.padreId), nom(p.madreId)].filter(Boolean).join(" y ")}</b>`);
+    if (p.parejaId) partes.push(`Pareja de <b>${nom(p.parejaId)}</b>`);
+    if (hijos.length) partes.push(`Padre/madre de <b>${hijos.join(", ")}</b>`);
+    if (herm.length) partes.push(`Hermano/a de <b>${herm.join(", ")}</b>`);
+    if (p.grupoHermanos) partes.push(`<span style="opacity:.7">grupo: ${p.grupoHermanos}</span>`);
+    return `<tr>
+      <td class="nom">${p.nombre}</td>
+      <td class="rel">${partes.join("<br>") || "—"}</td>
+      <td class="acc">
+        <button class="sec mini" data-edit="${p.id}">Editar</button>
+        <button class="sec mini" data-del="${p.id}">Borrar</button>
+      </td></tr>`;
+  }).join("");
+
+  $("#lista").querySelectorAll("[data-edit]").forEach(b => b.onclick = () => editar(b.dataset.edit));
+  $("#lista").querySelectorAll("[data-del]").forEach(b => b.onclick = () => borrar(b.dataset.del));
+}
+
+/* ---------- formulario ---------- */
+function limpiar() {
+  $("#form").reset(); $("#fId").value = ""; fotoActual = null;
+  $("#fPrev").removeAttribute("src");
+  $("#tituloForm").textContent = "Nueva persona";
+  $("#err").textContent = "";
+  pintarSelects(null);
+  $("#gruposExistentes").innerHTML = [...new Set(lista().map(p => p.grupoHermanos).filter(Boolean))]
+    .map(g => `<option value="${g}">`).join("");
+}
+
+function editar(id) {
+  const p = personas[id];
+  pintarSelects(id);
+  $("#fId").value = id;
+  $("#fNombre").value = p.nombre;
+  $("#fSexo").value = p.sexo || "H";
+  $("#fPadre").value = p.padreId || "";
+  $("#fMadre").value = p.madreId || "";
+  $("#fPareja").value = p.parejaId || "";
+  $("#fGrupo").value = p.grupoHermanos || "";
+  fotoActual = p.foto || null;
+  if (fotoActual) $("#fPrev").src = fotoActual; else $("#fPrev").removeAttribute("src");
+  $("#tituloForm").textContent = "Editar persona";
+  $("#err").textContent = "";
+  window.scrollTo({ top: 0, behavior: "smooth" });
+}
+
+/** ¿'ancestro' está en la línea ascendente de 'id'? Evita bucles imposibles. */
+function esAncestro(ancestro, id, visto = new Set()) {
+  if (!id || visto.has(id)) return false;
+  visto.add(id);
+  const p = personas[id]; if (!p) return false;
+  if (p.padreId === ancestro || p.madreId === ancestro) return true;
+  return esAncestro(ancestro, p.padreId, visto) || esAncestro(ancestro, p.madreId, visto);
+}
+
+$("#form").onsubmit = async e => {
+  e.preventDefault();
+  const id = $("#fId").value || nuevoId();
+  const nombre = $("#fNombre").value.trim();
+  const padreId = $("#fPadre").value || null;
+  const madreId = $("#fMadre").value || null;
+  const parejaId = $("#fPareja").value || null;
+  const err = m => { $("#err").textContent = m; return false; };
+
+  if (!nombre) return err("El nombre no puede estar vacío.");
+  if (lista().some(p => p.id !== id && p.nombre.toLowerCase() === nombre.toLowerCase()))
+    return err("Ya existe una persona con ese nombre. Sin fotos, el nombre es la única pista: tiene que ser único.");
+  if (padreId && padreId === madreId) return err("El padre y la madre no pueden ser la misma persona.");
+  if (esAncestro(id, padreId) || esAncestro(id, madreId)) return err("Ese parentesco crea un bucle: la persona sería antepasada de sí misma.");
+  if (parejaId === id) return err("Nadie puede ser su propia pareja.");
+  if (parejaId && (parejaId === padreId || parejaId === madreId)) return err("La pareja no puede ser también el padre o la madre.");
+
+  $("#btnGuardar").disabled = true;
+  const grupoHermanos = $("#fGrupo").value.trim().toLowerCase().replace(/[^a-z0-9_]+/g, "_") || null;
+  await guardarPersona(id, { nombre, sexo: $("#fSexo").value, padreId, madreId, parejaId, grupoHermanos, foto: fotoActual });
+  $("#btnGuardar").disabled = false;
+  personas = await cargarPersonas();
+  limpiar(); pintarLista(); pintarCaps();
+};
+
+async function borrar(id) {
+  if (!confirm(`Borrar a ${nom(id)}? También se eliminarán sus parentescos en las demás fichas.`)) return;
+  await borrarPersona(id);
+  personas = await cargarPersonas();
+  limpiar(); pintarLista(); pintarCaps();
+}
+
+/* ---------- foto (redimensionada en el navegador) ---------- */
+$("#btnFoto").onclick = () => $("#fFoto").click();
+$("#btnQuitaFoto").onclick = () => { fotoActual = null; $("#fPrev").removeAttribute("src"); $("#fFoto").value = ""; };
+$("#fFoto").onchange = e => {
+  const f = e.target.files[0]; if (!f) return;
+  const img = new Image();
+  img.onload = () => {
+    const L = 320;
+    const lado = Math.min(img.width, img.height);
+    const c = document.createElement("canvas"); c.width = c.height = L;
+    c.getContext("2d").drawImage(img, (img.width - lado) / 2, (img.height - lado) / 2, lado, lado, 0, 0, L, L);
+    fotoActual = c.toDataURL("image/jpeg", 0.75);   // ~30-40 KB
+    $("#fPrev").src = fotoActual;
+    URL.revokeObjectURL(img.src);
+  };
+  img.src = URL.createObjectURL(f);
+};
+
+$("#btnCancelar").onclick = limpiar;
+$("#buscar").oninput = pintarLista;
+
+(async () => {
+  personas = await cargarPersonas();
+  limpiar(); pintarLista(); pintarCaps();
+  $("#nota").innerHTML = esDemo()
+    ? `<b>Modo demo.</b> Los cambios se guardan solo en este navegador. Rellena <code>FIREBASE_CONFIG</code> en <code>db.js</code> y aplica <code>reglas-rtdb.json</code> para pasar a la base de datos real.`
+    : `<b>Orden recomendado de alta:</b> primero los mayores (sin padres, solo pareja), después los hijos. Así los desplegables de padre y madre ya tienen a quién elegir.`;
+})();
+</script>
+</body>
+</html>

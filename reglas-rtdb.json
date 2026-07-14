@@ -1,0 +1,67 @@
+{
+  "rules": {
+    "personas": {
+      ".read": true,
+      ".write": "auth != null && root.child('admins').child(auth.uid).val() === true",
+      "$id": {
+        ".validate": "newData.hasChildren(['nombre','sexo'])",
+        "nombre": {
+          ".validate": "newData.isString() && newData.val().length > 1 && newData.val().length < 60"
+        },
+        "sexo": {
+          ".validate": "newData.val() === 'H' || newData.val() === 'M'"
+        },
+        "padreId": {
+          ".validate": "newData.isString() && root.child('personas').child(newData.val()).exists()"
+        },
+        "madreId": {
+          ".validate": "newData.isString() && root.child('personas').child(newData.val()).exists()"
+        },
+        "parejaId": {
+          ".validate": "newData.isString() && root.child('personas').child(newData.val()).exists()"
+        },
+        "foto": {
+          ".validate": "newData.isString() && newData.val().length < 200000"
+        },
+        "$otro": {
+          ".validate": false
+        },
+        "grupoHermanos": {
+          ".validate": "newData.isString() && newData.val().matches(/^[a-z0-9_]{2,32}$/)"
+        }
+      }
+    },
+    "ranking": {
+      ".read": true,
+      "$tablero": {
+        ".validate": "$tablero.matches(/^(personal|hermanos|padrehijo|pareja)_(4|6|8|12|15)$|^trio_(5|6|7)$/)",
+        ".indexOn": [
+          "seg"
+        ],
+        "$marca": {
+          ".write": "!data.exists() && newData.exists()",
+          ".validate": "newData.hasChildren(['jugador','seg','intentos','ts'])",
+          "jugador": {
+            ".validate": "newData.isString() && newData.val().length > 0 && newData.val().length <= 24"
+          },
+          "seg": {
+            ".validate": "newData.isNumber() && newData.val() >= 1 && newData.val() < 36000"
+          },
+          "intentos": {
+            ".validate": "newData.isNumber() && newData.val() >= 1 && newData.val() < 2000"
+          },
+          "ts": {
+            ".validate": "newData.val() === now"
+          },
+          "$otro": {
+            ".validate": false
+          }
+        }
+      }
+    },
+    "admins": {
+      ".read": false,
+      ".write": false
+    }
+  }
+}
