@@ -488,18 +488,8 @@ function construirPanel(N, dif, personas) {
     });
   }
 
-  /* --- OTRA FAMILIA: N-1 del mismo primer apellido + 1 de otro --- */
-  {
-    const porApe = {};
-    L.forEach(p => { (porApe[apellido(p)] = porApe[apellido(p)] || []).push(p); });
-    const troncos = Object.entries(porApe).filter(([, a]) => a.length >= need).map(([k]) => k);
-    if (troncos.length) generadores.push(() => {
-      const tronco = _baraja(troncos)[0];
-      const fuera = L.filter(p => apellido(p) !== tronco);
-      if (!fuera.length) return null;
-      return _panel(`¿Quién no es de la familia ${tronco}?`, _baraja(porApe[tronco]).slice(0, need), _baraja(fuera)[0]);
-    });
-  }
+  /* --- (La pregunta "de qué familia" se ha retirado: los apellidos de Ahedo
+         se repiten entre ramas sin parentesco y hacían la respuesta ambigua.) --- */
 
   /* --- MÁS JOVEN / MAYOR: edades con hueco claro --- */
   {
@@ -521,42 +511,54 @@ function construirPanel(N, dif, personas) {
     }
   }
 
-  /* --- DIFÍCIL: preguntas por fecha --- */
+  /* --- DIFÍCIL: preguntas por fecha (con más peso: son las que de verdad cuestan) --- */
   if (dif === "dificil") {
     const conAnio = L.filter(p => anioNac(p));
     const conMes = L.filter(p => mesNac(p));
+    const peso = (gen, veces) => { for (let k = 0; k < veces; k++) generadores.push(gen); };
 
-    // no nació en tal mes
+    // no nació en tal mes (x4 de peso: es de las más difíciles)
     const porMes = {};
     conMes.forEach(p => { (porMes[mesNac(p)] = porMes[mesNac(p)] || []).push(p); });
     const mesesOk = Object.entries(porMes).filter(([, a]) => a.length >= need);
-    if (mesesOk.length) generadores.push(() => {
+    if (mesesOk.length) peso(() => {
       const [mm, gente] = _baraja(mesesOk)[0];
       const fuera = conMes.filter(p => mesNac(p) !== mm);
       if (!fuera.length) return null;
       const nombreMes = ["", "enero", "febrero", "marzo", "abril", "mayo", "junio", "julio", "agosto", "septiembre", "octubre", "noviembre", "diciembre"][+mm];
       return _panel(`¿Quién no nació en ${nombreMes}?`, _baraja(gente).slice(0, need), _baraja(fuera)[0]);
-    });
+    }, 4);
 
-    // no es del siglo XX (1900-1999) frente a XXI (2000+)
-    const sXX = conAnio.filter(p => anioNac(p) >= 1900 && anioNac(p) <= 1999);
-    const sXXI = conAnio.filter(p => anioNac(p) >= 2000);
-    if (sXX.length >= need && sXXI.length) generadores.push(() =>
-      _panel("¿Quién no es del siglo XX?", _baraja(sXX).slice(0, need), _baraja(sXXI)[0]));
-    if (sXXI.length >= need && sXX.length) generadores.push(() =>
-      _panel("¿Quién no es del siglo XXI?", _baraja(sXXI).slice(0, need), _baraja(sXX)[0]));
+    // no es del siglo XX / XXI — grupo pegado a la frontera del 2000, impostor al otro lado (x2)
+    const cercaFrontera = (pool, haciaArriba) =>            // el más próximo al año 2000
+      pool.sort((a, b) => haciaArriba ? anioNac(a) - anioNac(b) : anioNac(b) - anioNac(a)).slice(0, 1);
+    peso(() => {
+      const xx = conAnio.filter(p => anioNac(p) <= 1999).sort((a, b) => anioNac(b) - anioNac(a)).slice(0, need);
+      const cerca = cercaFrontera(conAnio.filter(p => anioNac(p) >= 2000 && anioNac(p) <= 2004), true); // 2000, 2001…
+      if (xx.length === need && cerca.length) return _panel("¿Quién no es del siglo XX?", _baraja(xx), cerca[0]);
+      return null;
+    }, 2);
+    peso(() => {
+      const xxi = conAnio.filter(p => anioNac(p) >= 2000).sort((a, b) => anioNac(a) - anioNac(b)).slice(0, need);
+      const cerca = cercaFrontera(conAnio.filter(p => anioNac(p) >= 1995 && anioNac(p) <= 1999), false); // 1999, 1998…
+      if (xxi.length === need && cerca.length) return _panel("¿Quién no es del siglo XXI?", _baraja(xxi), cerca[0]);
+      return null;
+    }, 2);
 
-    // no es de la década de los X0
+    // no es de la década de los X0 — impostor de una década CONTIGUA (x4)
     const porDecada = {};
     conAnio.forEach(p => { const d = Math.floor(anioNac(p) / 10) * 10; (porDecada[d] = porDecada[d] || []).push(p); });
-    const decadasOk = Object.entries(porDecada).filter(([, a]) => a.length >= need);
-    if (decadasOk.length) generadores.push(() => {
-      const [dec, gente] = _baraja(decadasOk)[0];
-      const fuera = conAnio.filter(p => Math.floor(anioNac(p) / 10) * 10 !== +dec);
-      if (!fuera.length) return null;
-      const etiq = +dec >= 2000 ? `los ${String(dec).slice(2)}` : `los ${String(dec).slice(2)}`;
-      return _panel(`¿Quién no nació en la década de ${etiq}?`, _baraja(gente).slice(0, need), _baraja(fuera)[0]);
-    });
+    const decadasOk = Object.entries(porDecada).filter(([, a]) => a.length >= need).map(([d, a]) => [+d, a]);
+    if (decadasOk.length) peso(() => {
+      const [dec, gente] = decadasOk[(Math.random() * decadasOk.length) | 0];
+      // impostor preferentemente de la década anterior o siguiente (más difícil que uno lejano)
+      const contigua = conAnio.filter(p => { const d = Math.floor(anioNac(p) / 10) * 10; return d === dec - 10 || d === dec + 10; });
+      const lejana = conAnio.filter(p => Math.floor(anioNac(p) / 10) * 10 !== dec);
+      const impostor = _baraja(contigua.length ? contigua : lejana)[0];
+      if (!impostor) return null;
+      const etiq = `los ${String(dec).slice(2).padStart(2, "0")}`;
+      return _panel(`¿Quién no nació en la década de ${etiq}?`, _baraja(gente).slice(0, need), impostor);
+    }, 4);
   }
 
   for (const g of _baraja(generadores)) {

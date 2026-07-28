@@ -78,7 +78,18 @@ td.acc{text-align:right;white-space:nowrap}
 </style>
 </head>
 <body>
-<div class="env">
+<div id="acceso" style="min-height:100dvh;display:flex;align-items:center;justify-content:center;padding:20px">
+  <div style="background:var(--tinta-2);border-radius:14px;padding:28px;max-width:340px;width:100%;text-align:center">
+    <div class="marca" style="font-family:var(--serif);font-weight:600;font-size:22px;margin-bottom:6px">Gente de <em style="font-style:normal;color:var(--amb)">Ahedo</em></div>
+    <p style="color:var(--tenue);font-size:14px;margin-bottom:18px">Zona de administración</p>
+    <input id="clave" type="password" inputmode="numeric" placeholder="Contraseña"
+      style="width:100%;background:var(--tinta);border:1px solid var(--tinta-3);color:var(--texto);border-radius:9px;padding:12px;font:inherit;font-size:16px;text-align:center;letter-spacing:.3em">
+    <p id="claveErr" style="color:var(--rosa);font-size:13px;min-height:1.2em;margin-top:8px"></p>
+    <button id="claveOk" class="pri" style="width:100%;background:var(--amb);color:var(--tinta);border:0;border-radius:9px;padding:12px;font:inherit;font-weight:600;font-size:15px;cursor:pointer">Entrar</button>
+    <p style="margin-top:16px"><a href="index.html" style="color:var(--tenue);font-size:13px;text-decoration:none">← Volver al juego</a></p>
+  </div>
+</div>
+<div class="env" id="panelAdmin" style="display:none">
   <header>
     <div class="marca">Memoria <em>Familiar</em></div>
     <a class="enlace" href="index.html">← Volver al juego</a>
@@ -136,6 +147,25 @@ td.acc{text-align:right;white-space:nowrap}
 
 <script type="module">
 import { MODOS, cargarPersonas, guardarPersona, borrarPersona, nuevoId, capacidad, esDemo, sonHermanos, fotosDe } from "./db.js";
+
+/* ---- acceso (barrera anti-toques; no es seguridad real) ---- */
+const CLAVE = "1310";
+const gate = document.getElementById("acceso");
+const panel = document.getElementById("panelAdmin");
+const yaDentro = () => { try { return sessionStorage.getItem("ahedo.admin") === "1"; } catch (e) { return false; } };
+function entrar() {
+  gate.style.display = "none";
+  panel.style.display = "";
+  try { sessionStorage.setItem("ahedo.admin", "1"); } catch (e) {}
+}
+function comprobar() {
+  const v = document.getElementById("clave").value.trim();
+  if (v === CLAVE) entrar();
+  else { document.getElementById("claveErr").textContent = "Contraseña incorrecta"; document.getElementById("clave").value = ""; document.getElementById("clave").focus(); }
+}
+document.getElementById("claveOk").onclick = comprobar;
+document.getElementById("clave").addEventListener("keydown", e => { if (e.key === "Enter") comprobar(); });
+if (yaDentro()) entrar(); else document.getElementById("clave").focus();
 
 const $ = s => document.querySelector(s);
 let personas = {};
