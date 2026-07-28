@@ -1,6 +1,6 @@
-LISTADO DE PERSONAS — Gente de Ahedo (128)
-[N] = nº de fotos · [ ] = sin foto
-FALTAN 76 fotos de 128. Con 2+ fotos: 4.
+LISTADO — Gente de Ahedo (131)
+[N]=nº fotos · [ ]=sin foto
+FALTAN 76 fotos de 131.
 
 A
   [ ] Abraham Pérez (H)  ·  hijo/a de David Pérez
@@ -18,7 +18,7 @@ A
 
 A
   [ ] Ana (M)  ·  pareja de Javier Pérez
-  [1] Andrea (M)  ·  pareja de Aritz
+  [1] Andrea (M)  ·  hijo/a de Jose Luis Blanco y Bety · pareja de Aritz
   [1] Aner Macías (H)  ·  hijo/a de Sergio Macías
 
 Á
@@ -36,15 +36,17 @@ A
 
 B
   [ ] Benito Fernandez (H)  ·  pareja de Maripi Peña
+  [1] Bety (M)  ·  pareja de Jose Luis Blanco
 
 C
   [ ] Candido (H)  ·  pareja de Primi
   [ ] Carla Martinez (M)  ·  hijo/a de Fernando Martinez y Lourdes
   [1] Carlos Fernández (H)  ·  hijo/a de Benito Fernandez y Maripi Peña · pareja de Eva Macías
-  [ ] Carmen De Luelmo (M)
+  [ ] Carmen De Luelmo (M)  ·  pareja de José Mari Pérez
   [1] Celia Pérez (M)  ·  hijo/a de Matias Perez y Obdulia Perez · pareja de Jacinto Ortiz
   [1] César Ortiz (H)  ·  hijo/a de Jacinto Ortiz y Celia Pérez · pareja de Yolanda Peña
   [ ] Chus (M)  ·  pareja de Luis Mari Macías
+  [1] Cristian (H)  ·  hijo/a de Jose Luis Blanco y Bety
 
 D
   [1] Daniel Ortiz (H)  ·  hijo/a de Jacinto Ortiz y Celia Pérez · pareja de Sofía Fernández
@@ -91,7 +93,9 @@ J
   [ ] Joaquin Moreno (H)  ·  pareja de Angelines Lopez
   [ ] Jorge Fernandez (H)  ·  hijo/a de Ruben Fernandez y Mayka
   [1] José González (H)  ·  pareja de Mari Cruz Martínez
+  [1] Jose Luis Blanco (H)  ·  pareja de Bety
   [ ] José Manuel Martínez (H)  ·  pareja de Mari Carmen Pérez
+  [ ] José Mari Pérez (H)  ·  pareja de Carmen De Luelmo
   [ ] Jose Peña (H)  ·  hijo/a de Atanasio Peña y Aurelia Arroyo
   [1] Joseba González (H)  ·  hijo/a de José González y Mari Cruz Martínez · pareja de Marta Moreno
   [ ] Juan Carlos (H)  ·  pareja de Arantxi Diez
@@ -104,7 +108,6 @@ L
   [ ] Lourdes (M)  ·  pareja de Fernando Martinez
   [1] Luis González (H)  ·  hijo/a de Roberto González y Rocío
   [ ] Luis Mari Macías (H)  ·  hijo/a de Miguel Macías y Merche Pérez · pareja de Chus
-  [ ] Luis Mari Perez (H)
   [ ] Luis Pérez (H)  ·  hijo/a de David Pérez
   [ ] Luka Perez (H)  ·  hijo/a de Pedro Perez y Dayanara
 
@@ -126,13 +129,13 @@ M
   [1] Merche Pérez (M)  ·  hijo/a de Candido y Primi · pareja de Miguel Macías
   [ ] Miguel Ángel Pérez (H)  ·  hijo/a de Matias Perez y Obdulia Perez
   [ ] Miguel Macías (H)  ·  pareja de Merche Pérez
-  [ ] Miguel Perez (H)  ·  hijo/a de Luis Mari Perez y Carmen De Luelmo
+  [ ] Miguel Perez (H)  ·  hijo/a de José Mari Pérez y Carmen De Luelmo
   [ ] Miren Diez (M)  ·  hijo/a de Esteban Diez y Ramona Peña
   [ ] Miriam Martínez (M)  ·  hijo/a de José Manuel Martínez y Mari Carmen Pérez
 
 N
   [ ] Naiara Macías (M)  ·  hijo/a de Luis Mari Macías y Chus
-  [1] Naira Fernández (M)  ·  hijo/a de Carlos Fernández y Eva Macías
+  [1] Nayra Fernández (M)  ·  hijo/a de Carlos Fernández y Eva Macías
   [1] Nico Pérez (H)  ·  hijo/a de Raúl Pérez y Araceli Sánchez
   [1] Noemí Sánchez (M)  ·  pareja de Ángel Luis Pérez
 
@@ -141,7 +144,7 @@ O
   [1] Oier González (H)  ·  hijo/a de Joseba González y Marta Moreno
 
 P
-  [ ] Pedro Perez (H)  ·  hijo/a de Luis Mari Perez y Carmen De Luelmo · pareja de Dayanara
+  [ ] Pedro Perez (H)  ·  hijo/a de José Mari Pérez y Carmen De Luelmo · pareja de Dayanara
   [ ] Pili Perez (M)  ·  hijo/a de Candido y Primi
   [ ] Primi (M)  ·  pareja de Candido
 

@@ -1,5 +1,5 @@
 // Cambia VERSION en cada despliegue para forzar la actualización en Android/Chrome.
-const VERSION = "mf-v9";
+const VERSION = "mf-v13";
 const ARCHIVOS = ["./", "./index.html", "./admin.html", "./db.js", "./manifest.json"];
 
 self.addEventListener("install", e => {
