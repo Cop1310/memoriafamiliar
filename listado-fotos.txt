@@ -1,0 +1,181 @@
+LISTADO DE PERSONAS — Gente de Ahedo (128 personas)
+[✓] = ya tiene foto   [ ] = falta foto
+FALTAN 97 fotos de 128.
+
+A
+  [ ] Abraham Pérez (H)  ·  hijo/a de David Pérez
+  [ ] Adolfo (H)  ·  hijo/a de Candido y Primi
+  [✓] Adrián Ortiz (H)  ·  hijo/a de César Ortiz y Yolanda Peña
+  [ ] Africa Perez (M)  ·  hijo/a de Pedro Perez y Dayanara
+  [ ] Aitana (M)  ·  hijo/a de Javier Pérez y Ana
+  [ ] Aitor González (H)  ·  hijo/a de José González y Mari Cruz Martínez
+  [✓] Alba Fernández (M)  ·  hijo/a de Carlos Fernández y Eva Macías
+  [ ] Alberto Peña (H)  ·  hijo/a de Atanasio Peña y Aurelia Arroyo · pareja de Mari Pili
+  [✓] Alejandro Ortiz (H)  ·  hijo/a de David Ortiz y Sonia Puente
+
+Á
+  [✓] Álex (H)  ·  hijo/a de Rizos y Mariascen
+
+A
+  [ ] Ana (M)  ·  pareja de Javier Pérez
+  [ ] Andrea (M)  ·  pareja de Aritz
+  [✓] Aner Macías (H)  ·  hijo/a de Sergio Macías
+
+Á
+  [✓] Ángel Luis Pérez (H)  ·  hijo/a de Emilio Pérez y Angelines Benito · pareja de Noemí Sánchez
+
+A
+  [ ] Angelines Benito (M)  ·  pareja de Emilio Pérez
+  [ ] Angelines Lopez (M)  ·  pareja de Joaquin Moreno
+  [✓] Araceli Sánchez (M)  ·  pareja de Raúl Pérez
+  [ ] Arantxi Diez (M)  ·  hijo/a de Esteban Diez y Ramona Peña · pareja de Juan Carlos
+  [ ] Aritz (H)  ·  hijo/a de Javi Txiki y Mari José · pareja de Andrea
+  [ ] Atanasio Peña (H)  ·  pareja de Aurelia Arroyo
+  [ ] Aurelia Arroyo (M)  ·  pareja de Atanasio Peña
+  [ ] Aurelio Peña (H)  ·  hijo/a de Atanasio Peña y Aurelia Arroyo
+
+B
+  [ ] Benito Fernandez (H)  ·  pareja de Maripi Peña
+
+C
+  [ ] Candido (H)  ·  pareja de Primi
+  [ ] Carla Martinez (M)  ·  hijo/a de Fernando Martinez y Lourdes
+  [✓] Carlos Fernández (H)  ·  hijo/a de Benito Fernandez y Maripi Peña · pareja de Eva Macías
+  [ ] Carmen De Luelmo (M)
+  [✓] Celia Pérez (M)  ·  hijo/a de Matias Perez y Obdulia Perez · pareja de Jacinto Ortiz
+  [✓] César Ortiz (H)  ·  hijo/a de Jacinto Ortiz y Celia Pérez · pareja de Yolanda Peña
+  [ ] Chus (M)  ·  pareja de Luis Mari Macías
+
+D
+  [✓] Daniel Ortiz (H)  ·  hijo/a de Jacinto Ortiz y Celia Pérez · pareja de Sofía Fernández
+  [ ] Daniel Pérez (H)  ·  hijo/a de Ángel Luis Pérez y Noemí Sánchez
+  [✓] David Ortiz (H)  ·  hijo/a de Jacinto Ortiz y Celia Pérez · pareja de Sonia Puente
+  [ ] David Pérez (H)  ·  hijo/a de Ismael Pérez y Juani Villena
+  [ ] Dayanara (M)  ·  pareja de Pedro Perez
+
+E
+  [ ] Eguz Diez (M)  ·  hijo/a de Esteban Diez y Ramona Peña
+  [ ] Eleni Diez (M)  ·  hijo/a de Esteban Diez y Ramona Peña · pareja de Toni
+  [ ] Elsa Fernandez (M)  ·  hijo/a de Ruben Fernandez y Mayka
+  [ ] Emilio Pérez (H)  ·  hijo/a de Matias Perez y Obdulia Perez · pareja de Angelines Benito
+  [✓] Emma Ortiz (M)  ·  hijo/a de Daniel Ortiz y Sofía Fernández
+  [ ] Esteban Diez (H)  ·  pareja de Ramona Peña
+  [ ] Esteban Diez Peña (H)  ·  hijo/a de Esteban Diez y Ramona Peña
+  [ ] Eva Macías (M)  ·  hijo/a de Miguel Macías y Merche Pérez · pareja de Carlos Fernández
+
+F
+  [ ] Fernando Martinez (H)  ·  hijo/a de Julio Martinez y Valen Lopez · pareja de Lourdes
+
+G
+  [ ] Gabri Pérez (H)  ·  hijo/a de Héctor Pérez y Mari Mar López
+  [✓] Gonzalo Ortiz (H)  ·  hijo/a de César Ortiz y Yolanda Peña
+
+H
+  [✓] Héctor Pérez (H)  ·  hijo/a de Emilio Pérez y Angelines Benito · pareja de Mari Mar López
+
+I
+  [ ] Inaxio (H)  ·  hijo/a de Iñaki y Yolanda Criado
+  [ ] Iñaki (H)  ·  pareja de Yolanda Criado
+  [ ] Iñaki Diez (H)  ·  hijo/a de Esteban Diez y Ramona Peña
+  [ ] Iñigo Macías (H)  ·  hijo/a de Luis Mari Macías y Chus
+  [✓] Irene Ortiz (M)  ·  hijo/a de David Ortiz y Sonia Puente
+  [ ] Ismael Pérez (H)  ·  pareja de Juani Villena
+  [ ] Ismaelito (H)  ·  hijo/a de Ismael Pérez y Juani Villena
+  [ ] Ivan Martinez (H)  ·  hijo/a de Fernando Martinez y Lourdes
+
+J
+  [ ] Jacinto Ortiz (H)  ·  pareja de Celia Pérez
+  [ ] Jaime Fernandez (H)  ·  hijo/a de Benito Fernandez y Maripi Peña
+  [ ] Javi Txiki (H)  ·  hijo/a de Marcelino Criado y Txiki · pareja de Mari José
+  [✓] Javier Pérez (H)  ·  hijo/a de Ismael Pérez y Juani Villena · pareja de Ana
+  [ ] Joaquin Moreno (H)  ·  pareja de Angelines Lopez
+  [ ] Jorge Fernandez (H)  ·  hijo/a de Ruben Fernandez y Mayka
+  [ ] José González (H)  ·  pareja de Mari Cruz Martínez
+  [ ] José Manuel Martínez (H)  ·  pareja de Mari Carmen Pérez
+  [ ] Jose Peña (H)  ·  hijo/a de Atanasio Peña y Aurelia Arroyo
+  [ ] Joseba González (H)  ·  hijo/a de José González y Mari Cruz Martínez · pareja de Marta Moreno
+  [ ] Juan Carlos (H)  ·  pareja de Arantxi Diez
+  [✓] Juani Villena (M)  ·  pareja de Ismael Pérez
+  [ ] Julio Martinez (H)
+
+L
+  [ ] Laura Martinez (M)  ·  hijo/a de Julio Martinez y Valen Lopez
+  [ ] Lorena Martinez (M)  ·  hijo/a de Julio Martinez y Valen Lopez
+  [ ] Lourdes (M)  ·  pareja de Fernando Martinez
+  [ ] Luis González (H)  ·  hijo/a de Roberto González y Rocío
+  [ ] Luis Mari Macías (H)  ·  hijo/a de Miguel Macías y Merche Pérez · pareja de Chus
+  [ ] Luis Mari Perez (H)
+  [ ] Luis Pérez (H)  ·  hijo/a de David Pérez
+  [ ] Luka Perez (H)  ·  hijo/a de Pedro Perez y Dayanara
+
+M
+  [ ] Marcelino Criado (H)  ·  pareja de Txiki
+  [✓] Mari Carmen Pérez (M)  ·  hijo/a de Candido y Primi · pareja de José Manuel Martínez
+  [✓] Mari Cruz Martínez (M)  ·  pareja de José González
+  [ ] Mari José (M)  ·  pareja de Javi Txiki
+  [ ] Mari Mar López (M)  ·  pareja de Héctor Pérez
+  [ ] Mari Pili (M)  ·  pareja de Alberto Peña
+  [ ] María Jesús Pérez (M)  ·  hijo/a de Matias Perez y Obdulia Perez
+  [ ] Mariascen (M)  ·  hijo/a de Marcelino Criado y Txiki · pareja de Rizos
+  [ ] Maripi Peña (M)  ·  hijo/a de Atanasio Peña y Aurelia Arroyo · pareja de Benito Fernandez
+  [ ] Marta González (M)  ·  hijo/a de Roberto González y Rocío
+  [ ] Marta Moreno (M)  ·  hijo/a de Joaquin Moreno y Angelines Lopez · pareja de Joseba González
+  [✓] Martín Pérez (H)  ·  hijo/a de Raúl Pérez y Araceli Sánchez
+  [ ] Matias Perez (H)
+  [ ] Mayka (M)  ·  pareja de Ruben Fernandez
+  [✓] Merche Pérez (M)  ·  hijo/a de Candido y Primi · pareja de Miguel Macías
+  [ ] Miguel Ángel Pérez (H)  ·  hijo/a de Matias Perez y Obdulia Perez
+  [ ] Miguel Macías (H)  ·  pareja de Merche Pérez
+  [ ] Miguel Perez (H)  ·  hijo/a de Luis Mari Perez y Carmen De Luelmo
+  [ ] Miren Diez (M)  ·  hijo/a de Esteban Diez y Ramona Peña
+  [ ] Miriam Martínez (M)  ·  hijo/a de José Manuel Martínez y Mari Carmen Pérez
+
+N
+  [ ] Naiara Macías (M)  ·  hijo/a de Luis Mari Macías y Chus
+  [✓] Naira Fernández (M)  ·  hijo/a de Carlos Fernández y Eva Macías
+  [✓] Nico Pérez (H)  ·  hijo/a de Raúl Pérez y Araceli Sánchez
+  [✓] Noemí Sánchez (M)  ·  pareja de Ángel Luis Pérez
+
+O
+  [ ] Obdulia Perez (M)
+  [ ] Oier González (H)  ·  hijo/a de Joseba González y Marta Moreno
+
+P
+  [ ] Pedro Perez (H)  ·  hijo/a de Luis Mari Perez y Carmen De Luelmo · pareja de Dayanara
+  [ ] Pili Perez (M)  ·  hijo/a de Candido y Primi
+  [ ] Primi (M)  ·  pareja de Candido
+
+R
+  [ ] Ramona Peña (M)  ·  hijo/a de Atanasio Peña y Aurelia Arroyo · pareja de Esteban Diez
+  [ ] Raúl Martínez (H)  ·  hijo/a de José Manuel Martínez y Mari Carmen Pérez
+  [ ] Raúl Pérez (H)  ·  hijo/a de Emilio Pérez y Angelines Benito · pareja de Araceli Sánchez
+  [ ] Rizos (H)  ·  pareja de Mariascen
+  [ ] Roberto González (H)  ·  hijo/a de José González y Mari Cruz Martínez · pareja de Rocío
+  [ ] Rocío (M)  ·  pareja de Roberto González
+  [ ] Ruben Fernandez (H)  ·  hijo/a de Benito Fernandez y Maripi Peña · pareja de Mayka
+
+S
+  [✓] Samuel Pérez (H)  ·  hijo/a de Ángel Luis Pérez y Noemí Sánchez
+  [ ] Saturnino Pérez (H)  ·  hijo/a de Matias Perez y Obdulia Perez
+  [✓] Sergio Macías (H)  ·  hijo/a de Miguel Macías y Merche Pérez
+  [ ] Sines Peña (H)  ·  hijo/a de Atanasio Peña y Aurelia Arroyo
+  [✓] Sofía Fernández (M)  ·  pareja de Daniel Ortiz
+  [✓] Sofía Pérez (M)  ·  hijo/a de Javier Pérez y Ana
+  [ ] Sonia Puente (M)  ·  pareja de David Ortiz
+
+T
+  [ ] Tequi Peña (H)  ·  hijo/a de Atanasio Peña y Aurelia Arroyo
+  [ ] Toni (H)  ·  pareja de Eleni Diez
+  [ ] Txiki (M)  ·  pareja de Marcelino Criado
+
+U
+  [ ] Urko (H)  ·  hijo/a de Javi Txiki y Mari José
+
+V
+  [ ] Valen Lopez (M)
+  [✓] Vega Ortiz (M)  ·  hijo/a de Daniel Ortiz y Sofía Fernández
+
+Y
+  [ ] Yago Pérez (H)  ·  hijo/a de Raúl Pérez y Araceli Sánchez
+  [ ] Yolanda Criado (M)  ·  hijo/a de Marcelino Criado y Txiki · pareja de Iñaki
+  [✓] Yolanda Peña (M)  ·  pareja de César Ortiz

@@ -28,13 +28,16 @@
         },
         "grupoHermanos": {
           ".validate": "newData.isString() && newData.val().matches(/^[a-z0-9_]{2,32}$/)"
+        },
+        "nacimiento": {
+          ".validate": "newData.isString() && newData.val().matches(/^[0-9]{4}(-[0-9]{2}(-[0-9]{2})?)?$/)"
         }
       }
     },
     "ranking": {
       ".read": true,
       "$tablero": {
-        ".validate": "$tablero.matches(/^(personal|hermanos|padrehijo|pareja)_(4|6|8|12|15)$|^trio_(5|6|7)$/)",
+        ".validate": "$tablero.matches(/^parejas_(personal|hermanos|padrehijo|pareja)_(4|6|8|12|15)$|^parejas_trio_(5|6|7)$|^edad_(facil|dificil)_(4|6|8|10|12)$|^impostor_(5|10)$/)",
         ".indexOn": [
           "seg"
         ],

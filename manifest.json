@@ -1,6 +1,6 @@
 {
-  "name": "Memoria Familiar",
-  "short_name": "Memoria",
+  "name": "Gente de Ahedo",
+  "short_name": "Ahedo",
   "start_url": "./index.html",
   "scope": "./",
   "display": "standalone",
@@ -8,7 +8,17 @@
   "background_color": "#131B33",
   "theme_color": "#131B33",
   "icons": [
-    { "src": "icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any maskable" },
-    { "src": "icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable" }
+    {
+      "src": "icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
   ]
 }

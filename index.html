@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#131B33">
-<title>Memoria Familiar</title>
+<title>Gente de Ahedo</title>
 <link rel="manifest" href="manifest.json">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -221,6 +221,49 @@ table.tabla tr:nth-child(1) td.pos{color:var(--ac)}
 }
 .guardar input:focus{outline:2px solid var(--ac);border-color:transparent}
 
+
+/* ============ PORTADA: elección de juego ============ */
+.juegos{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px}
+.juego{--c:var(--amb);text-align:left;background:var(--tinta-2);border:1px solid transparent;color:var(--texto);
+  border-radius:var(--r);padding:18px;cursor:pointer;font:inherit;display:flex;flex-direction:column;gap:8px;
+  transition:background .15s,border-color .15s}
+.juego:hover{background:var(--tinta-3)}
+.juego[aria-pressed="true"]{border-color:var(--c);background:var(--tinta-3)}
+.juego:focus-visible{outline:2px solid var(--c);outline-offset:2px}
+.juego .ico{font-size:26px;line-height:1}
+.juego b{font-family:var(--serif);font-weight:600;font-size:18px}
+.juego small{color:var(--tenue);font-size:12.5px;line-height:1.45}
+.juego.g-parejas{--c:var(--amb)} .juego.g-edad{--c:var(--azul)} .juego.g-impostor{--c:var(--rosa)}
+.niveles{display:flex;gap:8px;flex-wrap:wrap}
+.nivel{background:transparent;border:1px solid var(--tinta-3);color:var(--texto);border-radius:999px;
+  padding:9px 18px;cursor:pointer;font:inherit;font-size:14px;transition:border-color .15s,background .15s;text-align:center}
+.nivel:hover{border-color:var(--ac)}
+.nivel[aria-pressed="true"]{background:var(--ac);border-color:var(--ac);color:var(--tinta);font-weight:600}
+.nivel:focus-visible{outline:2px solid var(--ac);outline-offset:2px}
+.nivel small{display:block;font-size:11px;opacity:.7;font-weight:400;margin-top:1px}
+/* ============ ORDENA POR EDAD ============ */
+.instr{color:var(--tenue);font-size:13px;margin-bottom:12px}
+.tablero.edad .carta .cara{transform:rotateY(180deg)}
+.tablero .carta .orden{position:absolute;top:4px;left:4px;z-index:5;width:22px;height:22px;border-radius:50%;
+  background:var(--ac);color:var(--tinta);font-family:var(--mono);font-weight:700;font-size:12px;
+  display:flex;align-items:center;justify-content:center}
+.tablero .carta.mal-edad .frente{border-color:var(--rosa);box-shadow:inset 0 0 0 2px var(--rosa);animation:tiembla .34s}
+.tablero .carta.bien-edad{cursor:default}
+.tablero.edad .carta.bien-edad .frente{border-color:var(--verd);box-shadow:inset 0 0 0 2px var(--verd)}
+.marca-ok,.marca-mal{position:absolute;inset:0;z-index:6;display:flex;align-items:center;justify-content:center;
+  font-size:calc(var(--lado) * .5);font-weight:700;pointer-events:none}
+.marca-ok{color:var(--verd)} .marca-mal{color:var(--rosa)}
+/* ============ ENCUENTRA AL IMPOSTOR ============ */
+.impostor-cab{text-align:center;margin-bottom:14px}
+.impostor-cab .prog{font-family:var(--mono);font-size:12px;color:var(--tenue);letter-spacing:.06em}
+.impostor-cab h2{font-family:var(--serif);font-weight:700;font-size:clamp(20px,4.5vw,30px);margin-top:6px;letter-spacing:-.01em}
+.panel{display:grid;gap:var(--gap,10px);justify-content:center;margin:0 auto 8px}
+.panel .carta{width:var(--lado);height:var(--lado)}
+.panel .carta .cara{transform:rotateY(180deg)}
+.panel .carta.pick-ok .frente{border-color:var(--verd);box-shadow:inset 0 0 0 3px var(--verd)}
+.panel .carta.pick-mal .frente{border-color:var(--rosa);box-shadow:inset 0 0 0 3px var(--rosa);animation:tiembla .34s}
+.panel .carta .marca-ok,.panel .carta .marca-mal{font-size:calc(var(--lado) * .42)}
+
 /* ---------- móvil: que el tablero quepa entero ---------- */
 @media (max-width:640px){
   .env{padding:14px 10px 22px}
@@ -239,30 +282,73 @@ table.tabla tr:nth-child(1) td.pos{color:var(--ac)}
 <body>
 <div class="env">
   <header>
-    <div class="marca">Memoria <em>Familiar</em></div>
+    <div class="marca">Gente de <em>Ahedo</em></div>
     <a class="enlace" href="admin.html">Administrar personas</a>
   </header>
 
   <!-- ======= PORTADA ======= -->
   <section id="portada" class="portada">
     <div>
-      <h1>¿Sabes quién es <span>de quién</span>?</h1>
-      <p class="sub">Voltea las cartas y empareja a las personas por su parentesco. Sin fotos: aquí solo valen los nombres y lo que sepas de la familia.</p>
+      <h1>¿Cuánto sabes de <span>Ahedo</span>?</h1>
+      <p class="sub">Tres juegos con la gente del pueblo. Elige uno para empezar.</p>
     </div>
 
     <div class="bloque">
-      <span class="rotulo">1 · Tipo de partida</span>
-      <div class="modos" id="modos"></div>
+      <span class="rotulo">1 · Elige juego</span>
+      <div class="juegos" id="juegos">
+        <button class="juego g-parejas" data-juego="parejas" aria-pressed="true">
+          <span class="ico">🃏</span><b>Busca parejas</b>
+          <small>Voltea cartas y empareja por parentesco: la misma persona, hermanos, padre/hijo, pareja o trío.</small>
+        </button>
+        <button class="juego g-edad" data-juego="edad" aria-pressed="false">
+          <span class="ico">📅</span><b>Ordena por edad</b>
+          <small>Las cartas están a la vista. Púlsalas del mayor al más joven sin fallar.</small>
+        </button>
+        <button class="juego g-impostor" data-juego="impostor" aria-pressed="false">
+          <span class="ico">🕵️</span><b>Encuentra al impostor</b>
+          <small>En cada panel, todos cumplen algo menos uno. Descubre quién no encaja.</small>
+        </button>
+      </div>
     </div>
 
-    <div class="bloque">
-      <span class="rotulo">2 · Tamaño del tablero</span>
-      <div class="tallas" id="tallas"></div>
-      <p class="aviso oculto" id="aviso"></p>
+    <div id="opcParejas">
+      <div class="bloque">
+        <span class="rotulo">2 · Tipo de pareja</span>
+        <div class="modos" id="modos"></div>
+      </div>
+      <div class="bloque">
+        <span class="rotulo">3 · Tamaño del tablero</span>
+        <div class="tallas" id="tallas"></div>
+      </div>
     </div>
 
+    <div id="opcEdad" class="oculto">
+      <div class="bloque">
+        <span class="rotulo">2 · Dificultad</span>
+        <div class="niveles" id="nivelesEdad">
+          <button class="nivel" data-dif="facil" aria-pressed="true">Fácil<small>edades separadas</small></button>
+          <button class="nivel" data-dif="dificil" aria-pressed="false">Difícil<small>edades muy próximas</small></button>
+        </div>
+      </div>
+      <div class="bloque">
+        <span class="rotulo">3 · Cuántas cartas</span>
+        <div class="tallas" id="tallasEdad"></div>
+      </div>
+    </div>
+
+    <div id="opcImpostor" class="oculto">
+      <div class="bloque">
+        <span class="rotulo">2 · Número de paneles</span>
+        <div class="niveles" id="nivelesImpostor">
+          <button class="nivel" data-np="5" aria-pressed="true">5 paneles</button>
+          <button class="nivel" data-np="10" aria-pressed="false">10 paneles</button>
+        </div>
+      </div>
+    </div>
+
+    <p class="aviso oculto" id="aviso"></p>
     <div class="acciones" style="justify-content:flex-start">
-      <button class="jugar" id="btnJugar">Empezar partida</button>
+      <button class="jugar" id="btnJugar">Empezar</button>
       <button class="sec" id="btnVerRanking">Ver ranking</button>
     </div>
   </section>
@@ -284,10 +370,38 @@ table.tabla tr:nth-child(1) td.pos{color:var(--ac)}
     </details>
   </section>
 
+  <!-- ======= ORDENA POR EDAD ======= -->
+  <section id="partidaEdad" class="oculto">
+    <div class="barra">
+      <span class="chip modo-actual" id="chipEdad"></span>
+      <span class="chip">Aciertos <b id="edadAciertos">0</b></span>
+      <span class="chip">Reinicios <b id="edadReinicios">0</b></span>
+      <span class="chip">Tiempo <b id="edadTiempo">0:00</b></span>
+      <button class="salir" id="edadSalir">Salir</button>
+    </div>
+    <p class="instr" id="edadInstr">Pulsa las cartas del <b>mayor al más joven</b>.</p>
+    <div class="tablero edad" id="tableroEdad"></div>
+  </section>
+
+  <!-- ======= ENCUENTRA AL IMPOSTOR ======= -->
+  <section id="partidaImpostor" class="oculto">
+    <div class="barra">
+      <span class="chip modo-actual">Impostor</span>
+      <span class="chip">Fallos <b id="impFallos">0</b></span>
+      <span class="chip">Tiempo <b id="impTiempo">0:00</b></span>
+      <button class="salir" id="impSalir">Salir</button>
+    </div>
+    <div class="impostor-cab">
+      <div class="prog" id="impProg">Panel 1 de 5</div>
+      <h2 id="impPregunta"></h2>
+    </div>
+    <div class="panel" id="panelImpostor"></div>
+  </section>
+
   <!-- ======= FIN ======= -->
   <section id="fin" class="fin oculto">
-    <h1>Tablero completo</h1>
-    <p class="marca-grande"><b id="finTiempo">0:00</b> · <b id="finIntentos">0</b> intentos</p>
+    <h1 id="finTitulo">Completado</h1>
+    <p class="marca-grande"><b id="finTiempo">0:00</b> · <b id="finIntentos">0</b> <span id="finEtiqSec">intentos</span></p>
     <p class="record oculto" id="finRecord"></p>
 
     <div class="guardar" id="zonaGuardar">
@@ -296,8 +410,8 @@ table.tabla tr:nth-child(1) td.pos{color:var(--ac)}
     </div>
 
     <div class="acciones">
-      <button class="sec" id="btnOtra">Otra partida igual</button>
-      <button class="sec" id="btnVolver">Cambiar de modo</button>
+      <button class="sec" id="btnOtra">Jugar otra vez</button>
+      <button class="sec" id="btnVolver">Volver al menú</button>
     </div>
   </section>
 
@@ -306,11 +420,10 @@ table.tabla tr:nth-child(1) td.pos{color:var(--ac)}
     <div class="cabecera">
       <h1>Ranking</h1>
       <div class="sel">
-        <select id="rkModo"></select>
-        <select id="rkTalla"></select>
+        <select id="rkClave"></select>
       </div>
     </div>
-    <p class="sub">Ordenado por tiempo. Los intentos solo desempatan. Cada tipo de partida y cada tamaño tienen su propia clasificación.</p>
+    <p class="sub">Ordenado por tiempo; la otra columna solo desempata. Cada juego, modo y tamaño tiene su propia clasificación.</p>
     <div id="rkCuerpo"></div>
     <div class="acciones" style="justify-content:flex-start">
       <button class="sec" id="btnRkVolver">← Volver</button>
@@ -319,31 +432,42 @@ table.tabla tr:nth-child(1) td.pos{color:var(--ac)}
 </div>
 
 <script type="module">
-import { MODOS, TAMANOS_PAREJA, TAMANOS_TRIO, cargarPersonas, generarTablero, capacidad, etiquetaRelacion, esDemo, guardarMarca, cargarRanking } from "./db.js";
+import { MODOS, TAMANOS_PAREJA, TAMANOS_TRIO, TAMANOS_EDAD, TAMANOS_IMPOSTOR,
+         cargarPersonas, generarTablero, capacidad, etiquetaRelacion, esDemo,
+         guardarMarca, cargarRanking,
+         generarTableroEdad, capacidadEdad, generarRondaImpostor, hayImpostor, PANEL } from "./db.js";
 
 const $ = s => document.querySelector(s);
 const movil = () => window.matchMedia("(max-width:640px)").matches;
-
-/* Ajusta el tablero al hueco REAL de la pantalla (ancho Y alto).
-   Prueba todas las rejillas exactas (cols · filas = nº de cartas) y se queda
-   con la que da la carta más grande sin salirse. Se recalcula al girar el móvil. */
 const GAP = 8;
-function ajustarTablero() {
-  if (!estado || $("#partida").classList.contains("oculto")) return;
-  const n = estado.cartas.length;
-  const tab = $("#tablero");
-  const anchoDisp = tab.clientWidth;
-  const vh = window.visualViewport?.height ?? window.innerHeight;
-  const altoDisp = Math.max(150, vh - tab.getBoundingClientRect().top - 56);  // 56 = margen + resumen plegado
+const reloj = ms => { const s = Math.floor(ms / 1000); return `${Math.floor(s / 60)}:${String(s % 60).padStart(2, "0")}`; };
+const barajar = a => { for (let i = a.length - 1; i > 0; i--) { const j = (Math.random() * (i + 1)) | 0;[a[i], a[j]] = [a[j], a[i]]; } };
 
+let personas = {};
+let caps = {};
+let juego = "parejas";           // parejas | edad | impostor
+let modo = "personal";           // (parejas)
+let nGrupos = 4;                 // (parejas)
+let difEdad = "facil", nEdad = 6;
+let nPaneles = 5;
+let estado = null;
+
+/* cara interior de una carta: foto si existe, si no el nombre */
+const caraCarta = p => p.foto
+  ? `<img src="${p.foto}" alt="">`
+  : `<span class="nom">${p.nombre}</span>`;
+
+/* ====== ajuste de rejilla al hueco real (compartido por los 3 juegos) ====== */
+function ajustar(tab, n, restar = 56) {
+  if (!tab || !tab.clientWidth) return;
+  const ancho = tab.clientWidth;
+  const vh = window.visualViewport?.height ?? window.innerHeight;
+  const alto = Math.max(150, vh - tab.getBoundingClientRect().top - restar);
   let mejor = { lado: 0, cols: 2 };
   for (let cols = 2; cols <= 8; cols++) {
-    if (n % cols) continue;                       // solo rejillas sin huecos
+    if (n % cols) continue;
     const filas = n / cols;
-    const lado = Math.min(
-      (anchoDisp - GAP * (cols - 1)) / cols,
-      (altoDisp - GAP * (filas - 1)) / filas
-    );
+    const lado = Math.min((ancho - GAP * (cols - 1)) / cols, (alto - GAP * (filas - 1)) / filas);
     if (lado > mejor.lado) mejor = { lado, cols };
   }
   const lado = Math.floor(Math.min(mejor.lado, 150));
@@ -351,251 +475,361 @@ function ajustarTablero() {
   tab.style.setProperty("--gap", GAP + "px");
   tab.style.gridTemplateColumns = `repeat(${mejor.cols}, ${lado}px)`;
 }
+function ajustarActivo() {
+  if (!estado) return;
+  if (!$("#partida").classList.contains("oculto")) ajustar($("#tablero"), estado.cartas.length);
+  else if (!$("#partidaEdad").classList.contains("oculto")) ajustar($("#tableroEdad"), estado.cartas.length, 40);
+  else if (!$("#partidaImpostor").classList.contains("oculto")) ajustar($("#panelImpostor"), PANEL, 40);
+}
+window.addEventListener("resize", ajustarActivo);
+window.addEventListener("orientationchange", () => setTimeout(ajustarActivo, 250));
+window.visualViewport?.addEventListener("resize", ajustarActivo);
 
-let personas = {};
-let caps = {};
-let modo = "personal";
-let nGrupos = 4;
-let estado = null;
+/* ===================== PORTADA ===================== */
+const aplicarColor = c => document.documentElement.style.setProperty("--ac", `var(--${c})`);
+const colorJuego = { parejas: () => MODOS[modo].color, edad: () => "azul", impostor: () => "rosa" };
 
-/* ---------- portada ---------- */
+$("#juegos").querySelectorAll(".juego").forEach(b => b.onclick = () => {
+  juego = b.dataset.juego;
+  $("#juegos").querySelectorAll(".juego").forEach(x => x.setAttribute("aria-pressed", x === b));
+  $("#opcParejas").classList.toggle("oculto", juego !== "parejas");
+  $("#opcEdad").classList.toggle("oculto", juego !== "edad");
+  $("#opcImpostor").classList.toggle("oculto", juego !== "impostor");
+  aplicarColor(colorJuego[juego]());
+  refrescarOpciones();
+});
+
+/* --- parejas: modos y tallas (como antes) --- */
 function pintarModos() {
   $("#modos").innerHTML = Object.entries(MODOS).map(([k, m]) => `
     <button class="modo ${k}" data-modo="${k}" aria-pressed="${k === modo}" ${caps[k] < (k === "trio" ? 5 : 4) ? "disabled" : ""}>
       <b>${m.etiqueta}</b>
-      <small>${caps[k] ? `hasta ${caps[k]} ${m.grupo === 3 ? "tríos" : "parejas"}` : "sin datos suficientes"}</small>
+      <small>${caps[k] ? `hasta ${caps[k]} ${m.grupo === 3 ? "tríos" : "parejas"}` : "sin datos"}</small>
     </button>`).join("");
-  $("#modos").querySelectorAll(".modo").forEach(b =>
-    b.onclick = () => { modo = b.dataset.modo; aplicarColor(); pintarModos(); pintarTallas(); });
+  $("#modos").querySelectorAll(".modo").forEach(b => b.onclick = () => {
+    modo = b.dataset.modo; aplicarColor(MODOS[modo].color); pintarModos(); pintarTallasParejas();
+  });
 }
-
-function pintarTallas() {
+function pintarTallasParejas() {
   const m = MODOS[modo];
   const lista = m.grupo === 3 ? TAMANOS_TRIO : TAMANOS_PAREJA;
   const max = caps[modo] || 0;
   if (!lista.includes(nGrupos) || nGrupos > max) nGrupos = [...lista].reverse().find(n => n <= max) ?? lista[0];
-
   $("#tallas").innerHTML = lista.map(n => `
     <button class="talla" data-n="${n}" aria-pressed="${n === nGrupos}" ${n > max ? "disabled" : ""}>
       ${n} ${m.grupo === 3 ? "tríos" : "parejas"}<span>${n * m.grupo} cartas</span>
     </button>`).join("");
-  $("#tallas").querySelectorAll(".talla").forEach(b =>
-    b.onclick = () => { nGrupos = +b.dataset.n; pintarTallas(); });
-
-  const posible = max >= (m.grupo === 3 ? 5 : 4);
-  $("#btnJugar").disabled = !posible;
-  $("#aviso").classList.toggle("oculto", posible);
-  $("#aviso").textContent = posible ? "" :
-    `La base de datos solo permite ${max} ${m.grupo === 3 ? "tríos" : "parejas"} en este modo. Añade personas desde Administrar.`;
+  $("#tallas").querySelectorAll(".talla").forEach(b => b.onclick = () => { nGrupos = +b.dataset.n; pintarTallasParejas(); });
 }
 
-const aplicarColor = () => document.documentElement.style.setProperty("--ac", `var(--${MODOS[modo].color})`);
+/* --- edad: tallas --- */
+function pintarTallasEdad() {
+  const max = caps.edad || 0;
+  if (nEdad > max) nEdad = [...TAMANOS_EDAD].reverse().find(n => n <= max) ?? TAMANOS_EDAD[0];
+  $("#tallasEdad").innerHTML = TAMANOS_EDAD.map(n => `
+    <button class="talla" data-n="${n}" aria-pressed="${n === nEdad}" ${n > max ? "disabled" : ""}>
+      ${n} cartas</button>`).join("");
+  $("#tallasEdad").querySelectorAll(".talla").forEach(b => b.onclick = () => { nEdad = +b.dataset.n; pintarTallasEdad(); });
+}
+$("#nivelesEdad").querySelectorAll(".nivel").forEach(b => b.onclick = () => {
+  difEdad = b.dataset.dif;
+  $("#nivelesEdad").querySelectorAll(".nivel").forEach(x => x.setAttribute("aria-pressed", x === b));
+});
+$("#nivelesImpostor").querySelectorAll(".nivel").forEach(b => b.onclick = () => {
+  nPaneles = +b.dataset.np;
+  $("#nivelesImpostor").querySelectorAll(".nivel").forEach(x => x.setAttribute("aria-pressed", x === b));
+});
 
-/* ---------- partida ---------- */
-function empezar() {
+function refrescarOpciones() {
+  const av = $("#aviso");
+  av.classList.add("oculto");
+  $("#btnJugar").disabled = false;
+  if (juego === "parejas") { pintarModos(); pintarTallasParejas(); }
+  else if (juego === "edad") {
+    pintarTallasEdad();
+    if ((caps.edad || 0) < 4) { av.classList.remove("oculto"); av.textContent = `Solo hay ${caps.edad} personas con fecha de nacimiento. Añade más desde Administrar para jugar a las edades.`; $("#btnJugar").disabled = true; }
+  } else if (juego === "impostor") {
+    if (!caps.impostor) { av.classList.remove("oculto"); av.textContent = "No hay datos suficientes para montar paneles de impostor."; $("#btnJugar").disabled = true; }
+  }
+}
+
+/* ===================== ARRANQUE DE PARTIDA ===================== */
+$("#btnJugar").onclick = () => {
+  if (juego === "parejas") empezarParejas();
+  else if (juego === "edad") empezarEdad();
+  else empezarImpostor();
+};
+
+/* ---------- JUEGO 1: BUSCA PAREJAS ---------- */
+function empezarParejas() {
   const grupos = generarTablero(modo, nGrupos, personas);
-  if (!grupos) { $("#aviso").classList.remove("oculto"); $("#aviso").textContent = "No se ha podido montar un tablero válido con estos datos. Prueba con menos parejas."; return; }
-
+  if (!grupos) { $("#aviso").classList.remove("oculto"); $("#aviso").textContent = "No se ha podido montar un tablero válido. Prueba con menos parejas."; return; }
   const cartas = [];
   grupos.forEach((g, i) => g.forEach((p, j) => cartas.push({ uid: `${i}-${j}`, grupo: i, persona: p })));
   barajar(cartas);
-
-  estado = { grupos, cartas, abiertas: [], hechos: 0, intentos: 0, t0: Date.now(), bloqueo: false, timer: null };
+  estado = { tipo: "parejas", grupos, cartas, abiertas: [], hechos: 0, intentos: 0, t0: Date.now(), bloqueo: false, timer: null };
 
   const tab = $("#tablero");
   tab.innerHTML = cartas.map(c => `
     <button class="carta" data-uid="${c.uid}" aria-label="Carta oculta">
-      <span class="cara">
-        <span class="dorso"></span>
-        <span class="frente">
-          ${c.persona.foto ? `<img src="${c.persona.foto}" alt="">`
-                           : `<span class="nom">${c.persona.nombre}</span>`}
-        </span>
-      </span>
+      <span class="cara"><span class="dorso"></span><span class="frente">${caraCarta(c.persona)}</span></span>
     </button>`).join("");
   tab.querySelectorAll(".carta").forEach(b => b.onclick = () => voltear(b));
 
   $("#chipModo").textContent = MODOS[modo].etiqueta;
   $("#pista").textContent = MODOS[modo].pista;
-  $("#chipAciertos").textContent = "0";
-  $("#chipIntentos").textContent = "0";
-  $("#chipTiempo").textContent = "0:00";
+  $("#chipAciertos").textContent = "0"; $("#chipIntentos").textContent = "0"; $("#chipTiempo").textContent = "0:00";
   $("#listaArbol").innerHTML = `<li class="vacio">Todavía no has emparejado a nadie.</li>`;
   $("#arbolN").textContent = "0";
-  $("#arbol").open = !movil();          // en móvil arranca plegado: el tablero manda
+  $("#arbol").open = !movil();
   estado.timer = setInterval(() => $("#chipTiempo").textContent = reloj(Date.now() - estado.t0), 1000);
-
   ver("partida");
-  requestAnimationFrame(ajustarTablero);
+  requestAnimationFrame(ajustarActivo);
 }
-
 function voltear(btn) {
-  if (estado.bloqueo) return;
-  const uid = btn.dataset.uid;
-  if (btn.classList.contains("hecha") || btn.classList.contains("abierta")) return;
-
+  if (estado.bloqueo || btn.classList.contains("hecha") || btn.classList.contains("abierta")) return;
   btn.classList.add("abierta");
-  const carta = estado.cartas.find(c => c.uid === uid);
+  const carta = estado.cartas.find(c => c.uid === btn.dataset.uid);
   btn.setAttribute("aria-label", carta.persona.nombre);
   estado.abiertas.push({ btn, carta });
-
   const n = MODOS[modo].grupo;
   if (estado.abiertas.length < n) return;
-
-  estado.intentos++;
-  $("#chipIntentos").textContent = estado.intentos;
+  estado.intentos++; $("#chipIntentos").textContent = estado.intentos;
   const g = estado.abiertas[0].carta.grupo;
   const acierto = estado.abiertas.every(a => a.carta.grupo === g);
-
   estado.bloqueo = true;
   if (acierto) {
     setTimeout(() => {
       estado.abiertas.forEach(a => { a.btn.classList.remove("abierta"); a.btn.classList.add("hecha"); });
-      estado.hechos++;
-      $("#chipAciertos").textContent = estado.hechos;
-      anotar(estado.grupos[g]);
-      estado.abiertas = [];
-      estado.bloqueo = false;
-      if (estado.hechos === nGrupos) terminar();
+      estado.hechos++; $("#chipAciertos").textContent = estado.hechos;
+      anotar(estado.grupos[g]); estado.abiertas = []; estado.bloqueo = false;
+      if (estado.hechos === nGrupos) finParejas();
     }, 380);
   } else {
     estado.abiertas.forEach(a => a.btn.classList.add("fallo"));
     setTimeout(() => {
-      estado.abiertas.forEach(a => {
-        a.btn.classList.remove("abierta", "fallo");
-        a.btn.setAttribute("aria-label", "Carta oculta");
-      });
-      estado.abiertas = [];
-      estado.bloqueo = false;
+      estado.abiertas.forEach(a => { a.btn.classList.remove("abierta", "fallo"); a.btn.setAttribute("aria-label", "Carta oculta"); });
+      estado.abiertas = []; estado.bloqueo = false;
     }, 1050);
   }
 }
-
 function anotar(grupo) {
-  const ol = $("#listaArbol");
-  ol.querySelector(".vacio")?.remove();
+  const ol = $("#listaArbol"); ol.querySelector(".vacio")?.remove();
   const li = document.createElement("li");
-  li.innerHTML = `<span class="n">${String(ol.children.length + 1).padStart(2, "0")}</span>
-                  <span class="lazo"></span>
-                  <span><b>${grupo.map(p => p.nombre).join(" · ")}</b> <span class="rel">— ${etiquetaRelacion(modo, grupo)}</span></span>`;
-  ol.appendChild(li);
-  $("#arbolN").textContent = ol.children.length;
+  li.innerHTML = `<span class="n">${String(ol.children.length + 1).padStart(2, "0")}</span><span class="lazo"></span>
+    <span><b>${grupo.map(p => p.nombre).join(" · ")}</b> <span class="rel">— ${etiquetaRelacion(modo, grupo)}</span></span>`;
+  ol.appendChild(li); $("#arbolN").textContent = ol.children.length;
+}
+function finParejas() {
+  clearInterval(estado.timer);
+  estado.seg = Math.max(1, Math.round((Date.now() - estado.t0) / 1000));
+  mostrarFin(`${MODOS[modo].etiqueta} · ${nGrupos} parejas`, estado.seg, estado.intentos, `parejas_${modo}_${nGrupos}`);
 }
 
-async function terminar() {
-  clearInterval(estado.timer);
-  const seg = Math.max(1, Math.round((Date.now() - estado.t0) / 1000));
-  estado.seg = seg;
-  estado.guardada = false;
-  $("#finIntentos").textContent = estado.intentos;
-  $("#finTiempo").textContent = reloj(seg * 1000);
+/* ---------- JUEGO 2: ORDENA POR EDAD ---------- */
+function empezarEdad() {
+  const t = generarTableroEdad(difEdad, nEdad, personas);
+  if (!t) { $("#aviso").classList.remove("oculto"); $("#aviso").textContent = "No hay suficientes personas con edades ordenables para este tamaño. Prueba con menos cartas o el nivel fácil."; return; }
+  estado = { tipo: "edad", correcto: t.correcto, cartas: t.cartas, paso: 0, reinicios: 0, t0: Date.now(), timer: null, bloqueo: false };
 
+  $("#chipEdad").textContent = `Ordena por edad · ${difEdad === "facil" ? "Fácil" : "Difícil"}`;
+  $("#edadAciertos").textContent = "0"; $("#edadReinicios").textContent = "0"; $("#edadTiempo").textContent = "0:00";
+  pintarTableroEdad();
+  estado.timer = setInterval(() => $("#edadTiempo").textContent = reloj(Date.now() - estado.t0), 1000);
+  ver("partidaEdad");
+  requestAnimationFrame(ajustarActivo);
+}
+function pintarTableroEdad() {
+  const tab = $("#tableroEdad");
+  tab.innerHTML = estado.cartas.map((p, i) => `
+    <button class="carta" data-i="${i}" aria-label="${p.nombre}">
+      <span class="cara"><span class="dorso"></span><span class="frente">${caraCarta(p)}</span></span>
+    </button>`).join("");
+  tab.querySelectorAll(".carta").forEach(b => b.onclick = () => pulsarEdad(b));
+}
+function pulsarEdad(btn) {
+  if (estado.bloqueo || btn.classList.contains("bien-edad")) return;
+  const carta = estado.cartas[+btn.dataset.i];
+  const esperado = estado.correcto[estado.paso];
+  if (carta.id === esperado.id) {
+    btn.classList.add("bien-edad");
+    btn.insertAdjacentHTML("beforeend", `<span class="orden">${estado.paso + 1}</span>`);
+    estado.paso++; $("#edadAciertos").textContent = estado.paso;
+    if (estado.paso === estado.correcto.length) finEdad();
+  } else {
+    estado.bloqueo = true;
+    btn.classList.add("mal-edad");
+    btn.insertAdjacentHTML("beforeend", `<span class="marca-mal">✕</span>`);
+    estado.reinicios++; $("#edadReinicios").textContent = estado.reinicios;
+    setTimeout(() => {
+      // reinicio: se limpian los aciertos, MISMAS cartas en su sitio (no se rebarajan)
+      estado.paso = 0; $("#edadAciertos").textContent = "0";
+      $("#tableroEdad").querySelectorAll(".carta").forEach(c => {
+        c.classList.remove("bien-edad", "mal-edad");
+        c.querySelector(".orden")?.remove(); c.querySelector(".marca-mal")?.remove();
+      });
+      estado.bloqueo = false;
+    }, 900);
+  }
+}
+function finEdad() {
+  clearInterval(estado.timer);
+  estado.seg = Math.max(1, Math.round((Date.now() - estado.t0) / 1000));
+  mostrarFin(`Ordena por edad · ${difEdad === "facil" ? "Fácil" : "Difícil"} · ${nEdad} cartas`,
+             estado.seg, estado.reinicios, `edad_${difEdad}_${nEdad}`, "reinicios");
+}
+
+/* ---------- JUEGO 3: ENCUENTRA AL IMPOSTOR ---------- */
+function empezarImpostor() {
+  const ronda = generarRondaImpostor(nPaneles, personas);
+  if (!ronda) { $("#aviso").classList.remove("oculto"); $("#aviso").textContent = "No se han podido generar los paneles."; return; }
+  estado = { tipo: "impostor", ronda, idx: 0, fallos: 0, t0: Date.now(), timer: null, bloqueo: false };
+  $("#impFallos").textContent = "0"; $("#impTiempo").textContent = "0:00";
+  estado.timer = setInterval(() => $("#impTiempo").textContent = reloj(Date.now() - estado.t0), 1000);
+  pintarPanel();
+  ver("partidaImpostor");
+  requestAnimationFrame(ajustarActivo);
+}
+function pintarPanel() {
+  const panel = estado.ronda[estado.idx];
+  estado.cartas = panel.cartas;
+  $("#impProg").textContent = `Panel ${estado.idx + 1} de ${estado.ronda.length}`;
+  $("#impPregunta").textContent = panel.texto;
+  const cont = $("#panelImpostor");
+  cont.innerHTML = panel.cartas.map((p, i) => `
+    <button class="carta" data-i="${i}" aria-label="${p.nombre}">
+      <span class="cara"><span class="dorso"></span><span class="frente">${caraCarta(p)}</span></span>
+    </button>`).join("");
+  cont.querySelectorAll(".carta").forEach(b => b.onclick = () => pulsarImpostor(b));
+  requestAnimationFrame(ajustarActivo);
+}
+function pulsarImpostor(btn) {
+  if (estado.bloqueo) return;
+  const carta = estado.cartas[+btn.dataset.i];
+  if (carta.impostor) {
+    estado.bloqueo = true;
+    btn.classList.add("pick-ok");
+    btn.insertAdjacentHTML("beforeend", `<span class="marca-ok">✓</span>`);
+    setTimeout(() => {
+      estado.idx++;
+      if (estado.idx === estado.ronda.length) finImpostor();
+      else { estado.bloqueo = false; pintarPanel(); }
+    }, 700);
+  } else {
+    btn.classList.add("pick-mal");
+    btn.insertAdjacentHTML("beforeend", `<span class="marca-mal">✕</span>`);
+    estado.fallos++; $("#impFallos").textContent = estado.fallos;
+    setTimeout(() => { btn.classList.remove("pick-mal"); btn.querySelector(".marca-mal")?.remove(); }, 700);
+  }
+}
+function finImpostor() {
+  clearInterval(estado.timer);
+  estado.seg = Math.max(1, Math.round((Date.now() - estado.t0) / 1000));
+  mostrarFin(`Encuentra al impostor · ${estado.ronda.length} paneles`, estado.seg, estado.fallos, `impostor_${estado.ronda.length}`, "fallos");
+}
+
+/* ===================== FIN (común) ===================== */
+let finClave = "", finSeg = 0, finInt = 0;
+function mostrarFin(titulo, seg, secundario, clave, etiquetaSec = "intentos") {
+  finClave = clave; finSeg = seg; finInt = secundario;
+  $("#finTitulo").textContent = titulo;
+  $("#finTiempo").textContent = reloj(seg * 1000);
+  $("#finIntentos").textContent = secundario;
+  $("#finEtiqSec").textContent = etiquetaSec;
   $("#zonaGuardar").classList.remove("oculto");
-  $("#btnGuardarMarca").disabled = false;
-  $("#btnGuardarMarca").textContent = "Guardar en el ranking";
+  $("#btnGuardarMarca").disabled = false; $("#btnGuardarMarca").textContent = "Guardar en el ranking";
   $("#fJugador").value = leerJugador();
   $("#finRecord").classList.add("oculto");
   ver("fin");
-
-  // ¿entra en el top del tablero?
-  try {
-    const r = await cargarRanking(modo, nGrupos);
-    const puesto = r.filter(m => m.seg < seg || (m.seg === seg && m.intentos < estado.intentos)).length + 1;
-    if (puesto <= 3 || r.length === 0) {
-      $("#finRecord").textContent = `Entras en el puesto ${puesto} de este tablero`;
-      $("#finRecord").classList.remove("oculto");
-    }
-  } catch (e) {}
+  cargarRanking(clave).then(r => {
+    const puesto = r.filter(m => m.seg < seg || (m.seg === seg && m.intentos < secundario)).length + 1;
+    if (puesto <= 3 || r.length === 0) { $("#finRecord").textContent = `Entras en el puesto ${puesto} de este tablero`; $("#finRecord").classList.remove("oculto"); }
+  }).catch(() => {});
 }
-
 const leerJugador = () => { try { return localStorage.getItem("memoriaFamiliar.jugador") || ""; } catch (e) { return ""; } };
-
 $("#btnGuardarMarca").onclick = async () => {
   const jugador = $("#fJugador").value.trim();
   if (!jugador) { $("#fJugador").focus(); return; }
   if (estado.guardada) return;
   try { localStorage.setItem("memoriaFamiliar.jugador", jugador); } catch (e) {}
-  $("#btnGuardarMarca").disabled = true;
-  $("#btnGuardarMarca").textContent = "Guardando…";
-  await guardarMarca(modo, nGrupos, { jugador, seg: estado.seg, intentos: estado.intentos });
+  $("#btnGuardarMarca").disabled = true; $("#btnGuardarMarca").textContent = "Guardando…";
+  await guardarMarca(finClave, { jugador, seg: finSeg, intentos: finInt });
   estado.guardada = true;
   $("#zonaGuardar").classList.add("oculto");
-  rkModo = modo; rkTalla = nGrupos; rkVuelvoA = "fin";
+  rkClave = finClave; rkVuelvoA = "fin";
   abrirRanking(jugador);
 };
+$("#btnOtra").onclick = () => $("#btnJugar").onclick();
+$("#btnVolver").onclick = () => ver("portada");
 
-/* ---------- ranking ---------- */
-let rkModo = "personal", rkTalla = 4, rkVuelvoA = "portada";
-
+/* ===================== RANKING ===================== */
+/* claves:  parejas_{modo}_{n} · edad_{dif}_{n} · impostor_{n} */
+let rkClave = "parejas_personal_4", rkVuelvoA = "portada";
+const RK_OPCIONES = () => {
+  const o = [];
+  Object.entries(MODOS).forEach(([k, m]) => (m.grupo === 3 ? TAMANOS_TRIO : TAMANOS_PAREJA).forEach(n =>
+    o.push([`parejas_${k}_${n}`, `Parejas · ${m.etiqueta} · ${n}`])));
+  ["facil", "dificil"].forEach(d => TAMANOS_EDAD.forEach(n => o.push([`edad_${d}_${n}`, `Edad · ${d === "facil" ? "Fácil" : "Difícil"} · ${n} cartas`])));
+  TAMANOS_IMPOSTOR.forEach(n => o.push([`impostor_${n}`, `Impostor · ${n} paneles`]));
+  return o;
+};
 function abrirRanking(destacar = null) {
-  $("#rkModo").innerHTML = Object.entries(MODOS).map(([k, m]) =>
-    `<option value="${k}" ${k === rkModo ? "selected" : ""}>${m.etiqueta}</option>`).join("");
-  pintarTallasRanking();
+  const ops = RK_OPCIONES();
+  if (!ops.find(([k]) => k === rkClave)) rkClave = ops[0][0];
+  $("#rkClave").innerHTML = ops.map(([k, txt]) => `<option value="${k}" ${k === rkClave ? "selected" : ""}>${txt}</option>`).join("");
   cargarTabla(destacar);
   ver("ranking");
 }
-
-function pintarTallasRanking() {
-  const lista = MODOS[rkModo].grupo === 3 ? TAMANOS_TRIO : TAMANOS_PAREJA;
-  if (!lista.includes(rkTalla)) rkTalla = lista[0];
-  $("#rkTalla").innerHTML = lista.map(n =>
-    `<option value="${n}" ${n === rkTalla ? "selected" : ""}>${n} ${MODOS[rkModo].grupo === 3 ? "tríos" : "parejas"}</option>`).join("");
-}
-
 async function cargarTabla(destacar = null) {
-  document.documentElement.style.setProperty("--ac", `var(--${MODOS[rkModo].color})`);
+  const color = rkClave.startsWith("edad") ? "azul" : rkClave.startsWith("impostor") ? "rosa" : "amb";
+  aplicarColor(color);
+  const secTxt = rkClave.startsWith("edad") ? "Reinicios" : rkClave.startsWith("impostor") ? "Fallos" : "Intentos";
   $("#rkCuerpo").innerHTML = `<p class="vacio">Cargando…</p>`;
   let marcas = [];
-  try { marcas = await cargarRanking(rkModo, rkTalla); } catch (e) {}
-  if (!marcas.length) {
-    $("#rkCuerpo").innerHTML = `<p class="vacio">Nadie ha completado todavía este tablero. Sé el primero.</p>`;
-    return;
-  }
+  try { marcas = await cargarRanking(rkClave); } catch (e) {}
+  if (!marcas.length) { $("#rkCuerpo").innerHTML = `<p class="vacio">Nadie ha completado todavía este tablero. Sé el primero.</p>`; return; }
   $("#rkCuerpo").innerHTML = `<table class="tabla">
-    <thead><tr><th></th><th>Jugador</th><th style="text-align:right">Intentos</th><th style="text-align:right">Tiempo</th></tr></thead>
+    <thead><tr><th></th><th>Jugador</th><th style="text-align:right">${secTxt}</th><th style="text-align:right">Tiempo</th></tr></thead>
     <tbody>${marcas.map((m, i) => `
-      <tr class="${destacar && m.jugador === destacar && m.seg === estado?.seg ? "yo" : ""}">
+      <tr class="${destacar && m.jugador === destacar && m.seg === finSeg ? "yo" : ""}">
         <td class="pos">${String(i + 1).padStart(2, "0")}</td>
         <td class="jug">${m.jugador}</td>
         <td class="i">${m.intentos}</td>
         <td class="t">${reloj(m.seg * 1000)}</td>
       </tr>`).join("")}</tbody></table>`;
 }
+$("#rkClave").onchange = e => { rkClave = e.target.value; cargarTabla(); };
+$("#btnVerRanking").onclick = () => {
+  rkClave = juego === "parejas" ? `parejas_${modo}_${nGrupos}` : juego === "edad" ? `edad_${difEdad}_${nEdad}` : `impostor_${nPaneles}`;
+  rkVuelvoA = "portada"; abrirRanking();
+};
+$("#btnRkVolver").onclick = () => { aplicarColor(colorJuego[juego]()); ver(rkVuelvoA); };
 
-$("#rkModo").onchange = e => { rkModo = e.target.value; pintarTallasRanking(); cargarTabla(); };
-$("#rkTalla").onchange = e => { rkTalla = +e.target.value; cargarTabla(); };
-$("#btnVerRanking").onclick = () => { rkModo = modo; rkTalla = nGrupos; rkVuelvoA = "portada"; abrirRanking(); };
-$("#btnRkVolver").onclick = () => { aplicarColor(); ver(rkVuelvoA); };
-
-const reloj = ms => { const s = Math.floor(ms / 1000); return `${Math.floor(s / 60)}:${String(s % 60).padStart(2, "0")}`; };
-const barajar = a => { for (let i = a.length - 1; i > 0; i--) { const j = (Math.random() * (i + 1)) | 0;[a[i], a[j]] = [a[j], a[i]]; } };
-
+/* ===================== NAVEGACIÓN ===================== */
 function ver(cual) {
-  ["portada", "partida", "fin", "ranking"].forEach(s => $("#" + s).classList.toggle("oculto", s !== cual));
-  document.body.classList.toggle("jugando", cual === "partida");
-  if (cual !== "partida" && estado?.timer) clearInterval(estado.timer);
+  ["portada", "partida", "partidaEdad", "partidaImpostor", "fin", "ranking"].forEach(s => $("#" + s).classList.toggle("oculto", s !== cual));
+  document.body.classList.toggle("jugando", cual.startsWith("partida"));
+  if (!cual.startsWith("partida") && estado?.timer) clearInterval(estado.timer);
   window.scrollTo(0, 0);
 }
-
-/* ---------- arranque ---------- */
-$("#btnJugar").onclick = empezar;
-$("#btnOtra").onclick = empezar;
-$("#btnVolver").onclick = () => ver("portada");
 $("#btnSalir").onclick = () => { clearInterval(estado.timer); ver("portada"); };
-window.addEventListener("resize", ajustarTablero);
-window.addEventListener("orientationchange", () => setTimeout(ajustarTablero, 250));
-window.visualViewport?.addEventListener("resize", ajustarTablero);
-$("#arbol").addEventListener("toggle", ajustarTablero);
+$("#edadSalir").onclick = () => { clearInterval(estado.timer); ver("portada"); };
+$("#impSalir").onclick = () => { clearInterval(estado.timer); ver("portada"); };
+$("#arbol").addEventListener("toggle", ajustarActivo);
 
+/* ===================== INICIO ===================== */
 if ("serviceWorker" in navigator && location.protocol.startsWith("http"))
   navigator.serviceWorker.register("./sw.js").catch(() => {});
 
 (async () => {
   personas = await cargarPersonas();
   Object.keys(MODOS).forEach(k => caps[k] = capacidad(k, personas));
-  aplicarColor(); pintarModos(); pintarTallas();
+  caps.edad = capacidadEdad(personas);
+  caps.impostor = hayImpostor(personas) ? 1 : 0;
+  aplicarColor(MODOS[modo].color);
+  refrescarOpciones();
   if (esDemo()) $(".sub").insertAdjacentHTML("afterend",
-    `<p class="sub" style="color:var(--amb)">Modo demo: estás jugando con datos de ejemplo. Rellena <code>FIREBASE_CONFIG</code> en <code>db.js</code> para usar tu base de datos real.</p>`);
+    `<p class="sub" style="color:var(--amb)">Modo demo: datos locales. Rellena <code>FIREBASE_CONFIG</code> en <code>db.js</code> para usar la base compartida.</p>`);
 })();
 </script>
 </body>
