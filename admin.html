@@ -56,6 +56,7 @@ input,select{
 }
 input:focus,select:focus{outline:2px solid var(--amb);outline-offset:0;border-color:transparent}
 .fila{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.fila3{display:grid;grid-template-columns:1fr 1fr 1.3fr;gap:8px}
 .foto-zona{display:flex;align-items:center;gap:12px}
 .foto-zona{flex-wrap:wrap}
 .miniatura{position:relative;width:56px;height:56px;border-radius:9px;overflow:hidden;flex:none}
@@ -126,9 +127,12 @@ td.acc{text-align:right;white-space:nowrap}
         <label>Madre <select id="fMadre"></select></label>
       </div>
       <label>Pareja <select id="fPareja"></select></label>
-      <label>Grupo de hermanos <span style="opacity:.6">(solo si sus padres no están dados de alta)</span>
-        <input id="fGrupo" placeholder="p. ej. perez_mayores" list="gruposExistentes">
-        <datalist id="gruposExistentes"></datalist>
+      <label>Fecha de nacimiento <span style="opacity:.6">(la que sepas)</span>
+        <div class="fila3">
+          <input id="fDia" type="number" min="1" max="31" placeholder="Día" inputmode="numeric">
+          <input id="fMes" type="number" min="1" max="12" placeholder="Mes" inputmode="numeric">
+          <input id="fAnio" type="number" min="1900" max="2026" placeholder="Año" inputmode="numeric">
+        </div>
       </label>
       <label>Fotos <span style="opacity:.6">(opcional, varias)</span>
         <div class="foto-zona" id="fGaleria"></div>
@@ -220,7 +224,7 @@ function pintarLista() {
     if (p.parejaId) partes.push(`Pareja de <b>${nom(p.parejaId)}</b>`);
     if (hijos.length) partes.push(`Padre/madre de <b>${hijos.join(", ")}</b>`);
     if (herm.length) partes.push(`Hermano/a de <b>${herm.join(", ")}</b>`);
-    if (p.grupoHermanos) partes.push(`<span style="opacity:.7">grupo: ${p.grupoHermanos}</span>`);
+    if (p.nacimiento) partes.push(`<span style="opacity:.7">nac. ${p.nacimiento}</span>`);
     return `<tr>
       <td class="nom">${p.nombre}</td>
       <td class="rel">${partes.join("<br>") || "—"}</td>
@@ -241,8 +245,6 @@ function limpiar() {
   $("#tituloForm").textContent = "Nueva persona";
   $("#err").textContent = "";
   pintarSelects(null);
-  $("#gruposExistentes").innerHTML = [...new Set(lista().map(p => p.grupoHermanos).filter(Boolean))]
-    .map(g => `<option value="${g}">`).join("");
 }
 
 function editar(id) {
@@ -254,7 +256,10 @@ function editar(id) {
   $("#fPadre").value = p.padreId || "";
   $("#fMadre").value = p.madreId || "";
   $("#fPareja").value = p.parejaId || "";
-  $("#fGrupo").value = p.grupoHermanos || "";
+  const nac = p.nacimiento || "";
+  $("#fAnio").value = nac.slice(0, 4) || "";
+  $("#fMes").value = nac.length >= 7 ? +nac.slice(5, 7) : "";
+  $("#fDia").value = nac.length === 10 ? +nac.slice(8, 10) : "";
   fotosActual = fotosDe(p).slice();
   pintarGaleria();
   $("#tituloForm").textContent = "Editar persona";
@@ -291,8 +296,16 @@ $("#form").onsubmit = async e => {
   if (parejaId && (parejaId === padreId || parejaId === madreId)) return err("La pareja no puede ser también el padre o la madre.");
 
   $("#btnGuardar").disabled = true;
-  const grupoHermanos = $("#fGrupo").value.trim().toLowerCase().replace(/[^a-z0-9_]+/g, "_") || null;
-  await guardarPersona(id, { nombre, sexo: $("#fSexo").value, padreId, madreId, parejaId, grupoHermanos, fotos: fotosActual });
+  const dia = parseInt($("#fDia").value), mes = parseInt($("#fMes").value), anio = parseInt($("#fAnio").value);
+  let nacimiento = null;
+  if (anio >= 1900 && anio <= 2026) {
+    nacimiento = String(anio);
+    if (mes >= 1 && mes <= 12) {
+      nacimiento += "-" + String(mes).padStart(2, "0");
+      if (dia >= 1 && dia <= 31) nacimiento += "-" + String(dia).padStart(2, "0");
+    }
+  }
+  await guardarPersona(id, { nombre, sexo: $("#fSexo").value, padreId, madreId, parejaId, nacimiento, fotos: fotosActual });
   $("#btnGuardar").disabled = false;
   personas = await cargarPersonas();
   limpiar(); pintarLista(); pintarCaps();
