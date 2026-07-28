@@ -23,21 +23,24 @@
         "foto": {
           ".validate": "newData.isString() && newData.val().length < 200000"
         },
-        "$otro": {
-          ".validate": false
-        },
         "grupoHermanos": {
           ".validate": "newData.isString() && newData.val().matches(/^[a-z0-9_]{2,32}$/)"
         },
         "nacimiento": {
           ".validate": "newData.isString() && newData.val().matches(/^[0-9]{4}(-[0-9]{2}(-[0-9]{2})?)?$/)"
+        },
+        "fotos": {
+          ".validate": "newData.hasChildren()",
+          "$i": {
+            ".validate": "newData.isString() && newData.val().length < 200000"
+          }
         }
       }
     },
     "ranking": {
       ".read": true,
       "$tablero": {
-        ".validate": "$tablero.matches(/^parejas_(personal|hermanos|padrehijo|pareja)_(4|6|8|12|15)$|^parejas_trio_(5|6|7)$|^edad_(facil|dificil)_(4|6|8|10|12)$|^impostor_(5|10)$/)",
+        ".validate": "$tablero.matches(/^parejas_(personal|hermanos|padrehijo|pareja)_(4|6|8|12|15)$|^parejas_trio_(5|6|7)$|^edad_(facil|dificil)_(6|9|12|15|18)$|^impostor_(facil|dificil)_(5|10)_(9|12|15|18)$/)",
         ".indexOn": [
           "seg"
         ],

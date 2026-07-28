@@ -49,7 +49,12 @@ input,select{
 input:focus,select:focus{outline:2px solid var(--amb);outline-offset:0;border-color:transparent}
 .fila{display:grid;grid-template-columns:1fr 1fr;gap:10px}
 .foto-zona{display:flex;align-items:center;gap:12px}
-.foto-prev{width:56px;height:56px;border-radius:9px;background:var(--tinta);border:1px dashed var(--tinta-3);flex:none;object-fit:cover;display:block}
+.foto-zona{flex-wrap:wrap}
+.miniatura{position:relative;width:56px;height:56px;border-radius:9px;overflow:hidden;flex:none}
+.miniatura img{width:100%;height:100%;object-fit:cover;display:block}
+.miniatura button{position:absolute;top:2px;right:2px;width:18px;height:18px;border-radius:50%;border:0;
+  background:rgba(0,0,0,.65);color:#fff;font-size:12px;line-height:1;cursor:pointer;padding:0;display:flex;align-items:center;justify-content:center}
+.sin-fotos{color:var(--tenue);font-size:12px;font-style:italic}
 .botones{display:flex;gap:8px;margin-top:4px}
 button{font:inherit;cursor:pointer;border-radius:9px;border:0;padding:11px 16px;font-size:14px}
 .pri{background:var(--amb);color:var(--tinta);font-weight:600;flex:1}
@@ -106,13 +111,10 @@ td.acc{text-align:right;white-space:nowrap}
         <input id="fGrupo" placeholder="p. ej. perez_mayores" list="gruposExistentes">
         <datalist id="gruposExistentes"></datalist>
       </label>
-      <label>Foto <span style="opacity:.6">(opcional)</span>
-        <div class="foto-zona">
-          <img class="foto-prev" id="fPrev" alt="">
-          <input type="file" id="fFoto" accept="image/*" style="display:none">
-          <button type="button" class="sec mini" id="btnFoto">Elegir imagen</button>
-          <button type="button" class="sec mini" id="btnQuitaFoto">Quitar</button>
-        </div>
+      <label>Fotos <span style="opacity:.6">(opcional, varias)</span>
+        <div class="foto-zona" id="fGaleria"></div>
+        <input type="file" id="fFoto" accept="image/*" multiple style="display:none">
+        <button type="button" class="sec mini" id="btnFoto">Añadir foto(s)</button>
       </label>
       <p class="err" id="err"></p>
       <div class="botones">
@@ -133,11 +135,11 @@ td.acc{text-align:right;white-space:nowrap}
 </div>
 
 <script type="module">
-import { MODOS, cargarPersonas, guardarPersona, borrarPersona, nuevoId, capacidad, esDemo, sonHermanos } from "./db.js";
+import { MODOS, cargarPersonas, guardarPersona, borrarPersona, nuevoId, capacidad, esDemo, sonHermanos, fotosDe } from "./db.js";
 
 const $ = s => document.querySelector(s);
 let personas = {};
-let fotoActual = null;
+let fotosActual = [];
 
 const lista = () => Object.entries(personas).map(([id, p]) => ({ id, ...p })).sort((a, b) => a.nombre.localeCompare(b.nombre, "es"));
 const nom = id => personas[id]?.nombre || "";
@@ -196,8 +198,8 @@ function pintarLista() {
 
 /* ---------- formulario ---------- */
 function limpiar() {
-  $("#form").reset(); $("#fId").value = ""; fotoActual = null;
-  $("#fPrev").removeAttribute("src");
+  $("#form").reset(); $("#fId").value = ""; fotosActual = [];
+  pintarGaleria();
   $("#tituloForm").textContent = "Nueva persona";
   $("#err").textContent = "";
   pintarSelects(null);
@@ -215,8 +217,8 @@ function editar(id) {
   $("#fMadre").value = p.madreId || "";
   $("#fPareja").value = p.parejaId || "";
   $("#fGrupo").value = p.grupoHermanos || "";
-  fotoActual = p.foto || null;
-  if (fotoActual) $("#fPrev").src = fotoActual; else $("#fPrev").removeAttribute("src");
+  fotosActual = fotosDe(p).slice();
+  pintarGaleria();
   $("#tituloForm").textContent = "Editar persona";
   $("#err").textContent = "";
   window.scrollTo({ top: 0, behavior: "smooth" });
@@ -250,7 +252,7 @@ $("#form").onsubmit = async e => {
 
   $("#btnGuardar").disabled = true;
   const grupoHermanos = $("#fGrupo").value.trim().toLowerCase().replace(/[^a-z0-9_]+/g, "_") || null;
-  await guardarPersona(id, { nombre, sexo: $("#fSexo").value, padreId, madreId, parejaId, grupoHermanos, foto: fotoActual });
+  await guardarPersona(id, { nombre, sexo: $("#fSexo").value, padreId, madreId, parejaId, grupoHermanos, fotos: fotosActual });
   $("#btnGuardar").disabled = false;
   personas = await cargarPersonas();
   limpiar(); pintarLista(); pintarCaps();
@@ -265,20 +267,29 @@ async function borrar(id) {
 
 /* ---------- foto (redimensionada en el navegador) ---------- */
 $("#btnFoto").onclick = () => $("#fFoto").click();
-$("#btnQuitaFoto").onclick = () => { fotoActual = null; $("#fPrev").removeAttribute("src"); $("#fFoto").value = ""; };
-$("#fFoto").onchange = e => {
-  const f = e.target.files[0]; if (!f) return;
-  const img = new Image();
-  img.onload = () => {
-    const L = 320;
-    const lado = Math.min(img.width, img.height);
-    const c = document.createElement("canvas"); c.width = c.height = L;
-    c.getContext("2d").drawImage(img, (img.width - lado) / 2, (img.height - lado) / 2, lado, lado, 0, 0, L, L);
-    fotoActual = c.toDataURL("image/jpeg", 0.75);   // ~30-40 KB
-    $("#fPrev").src = fotoActual;
-    URL.revokeObjectURL(img.src);
-  };
-  img.src = URL.createObjectURL(f);
+function pintarGaleria() {
+  const g = $("#fGaleria");
+  if (!fotosActual.length) { g.innerHTML = `<span class="sin-fotos">Sin fotos. Jugará con el nombre.</span>`; return; }
+  g.innerHTML = fotosActual.map((f, i) => `<span class="miniatura"><img src="${f}" alt=""><button type="button" data-i="${i}" title="Quitar">✕</button></span>`).join("");
+  g.querySelectorAll("button").forEach(b => b.onclick = () => { fotosActual.splice(+b.dataset.i, 1); pintarGaleria(); });
+}
+function comprimir(file) {
+  return new Promise(res => {
+    const img = new Image();
+    img.onload = () => {
+      const L = 320, lado = Math.min(img.width, img.height);
+      const c = document.createElement("canvas"); c.width = c.height = L;
+      c.getContext("2d").drawImage(img, (img.width - lado) / 2, (img.height - lado) / 2, lado, lado, 0, 0, L, L);
+      URL.revokeObjectURL(img.src);
+      res(c.toDataURL("image/jpeg", 0.75));
+    };
+    img.src = URL.createObjectURL(file);
+  });
+}
+$("#fFoto").onchange = async e => {
+  for (const f of [...e.target.files]) fotosActual.push(await comprimir(f));
+  $("#fFoto").value = "";
+  pintarGaleria();
 };
 
 $("#btnCancelar").onclick = limpiar;

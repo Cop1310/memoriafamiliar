@@ -338,11 +338,22 @@ table.tabla tr:nth-child(1) td.pos{color:var(--ac)}
 
     <div id="opcImpostor" class="oculto">
       <div class="bloque">
-        <span class="rotulo">2 · Número de paneles</span>
+        <span class="rotulo">2 · Dificultad</span>
+        <div class="niveles" id="nivelesImpDif">
+          <button class="nivel" data-dif="facil" aria-pressed="true">Fácil<small>parentescos</small></button>
+          <button class="nivel" data-dif="dificil" aria-pressed="false">Difícil<small>además, fechas</small></button>
+        </div>
+      </div>
+      <div class="bloque">
+        <span class="rotulo">3 · Número de paneles</span>
         <div class="niveles" id="nivelesImpostor">
           <button class="nivel" data-np="5" aria-pressed="true">5 paneles</button>
           <button class="nivel" data-np="10" aria-pressed="false">10 paneles</button>
         </div>
+      </div>
+      <div class="bloque">
+        <span class="rotulo">4 · Cartas por panel</span>
+        <div class="tallas" id="tallasImpostor"></div>
       </div>
     </div>
 
@@ -432,10 +443,10 @@ table.tabla tr:nth-child(1) td.pos{color:var(--ac)}
 </div>
 
 <script type="module">
-import { MODOS, TAMANOS_PAREJA, TAMANOS_TRIO, TAMANOS_EDAD, TAMANOS_IMPOSTOR,
+import { MODOS, TAMANOS_PAREJA, TAMANOS_TRIO, tamanosEdad, TAMANOS_IMPOSTOR, PANELES,
          cargarPersonas, generarTablero, capacidad, etiquetaRelacion, esDemo,
-         guardarMarca, cargarRanking,
-         generarTableroEdad, capacidadEdad, generarRondaImpostor, hayImpostor, PANEL } from "./db.js";
+         guardarMarca, cargarRanking, fotosDe, fotoAzar,
+         generarTableroEdad, capacidadEdad, generarRondaImpostor, capacidadImpostor } from "./db.js";
 
 const $ = s => document.querySelector(s);
 const movil = () => window.matchMedia("(max-width:640px)").matches;
@@ -449,13 +460,14 @@ let juego = "parejas";           // parejas | edad | impostor
 let modo = "personal";           // (parejas)
 let nGrupos = 4;                 // (parejas)
 let difEdad = "facil", nEdad = 6;
-let nPaneles = 5;
+let difImp = "facil", nPaneles = 5, nCartasImp = 9;
 let estado = null;
 
-/* cara interior de una carta: foto si existe, si no el nombre */
-const caraCarta = p => p.foto
-  ? `<img src="${p.foto}" alt="">`
-  : `<span class="nom">${p.nombre}</span>`;
+/* cara interior de una carta: foto (forzada o al azar) si existe, si no el nombre */
+const caraCarta = (p, fotoForzada) => {
+  const f = fotoForzada || fotoAzar(p);
+  return f ? `<img src="${f}" alt="">` : `<span class="nom">${p.nombre}</span>`;
+};
 
 /* ====== ajuste de rejilla al hueco real (compartido por los 3 juegos) ====== */
 function ajustar(tab, n, restar = 56) {
@@ -479,7 +491,7 @@ function ajustarActivo() {
   if (!estado) return;
   if (!$("#partida").classList.contains("oculto")) ajustar($("#tablero"), estado.cartas.length);
   else if (!$("#partidaEdad").classList.contains("oculto")) ajustar($("#tableroEdad"), estado.cartas.length, 40);
-  else if (!$("#partidaImpostor").classList.contains("oculto")) ajustar($("#panelImpostor"), PANEL, 40);
+  else if (!$("#partidaImpostor").classList.contains("oculto")) ajustar($("#panelImpostor"), estado.cartas.length, 40);
 }
 window.addEventListener("resize", ajustarActivo);
 window.addEventListener("orientationchange", () => setTimeout(ajustarActivo, 250));
@@ -525,8 +537,9 @@ function pintarTallasParejas() {
 /* --- edad: tallas --- */
 function pintarTallasEdad() {
   const max = caps.edad || 0;
-  if (nEdad > max) nEdad = [...TAMANOS_EDAD].reverse().find(n => n <= max) ?? TAMANOS_EDAD[0];
-  $("#tallasEdad").innerHTML = TAMANOS_EDAD.map(n => `
+  const lista = tamanosEdad(difEdad);
+  if (!lista.includes(nEdad) || nEdad > max) nEdad = [...lista].reverse().find(n => n <= max) ?? lista[0];
+  $("#tallasEdad").innerHTML = lista.map(n => `
     <button class="talla" data-n="${n}" aria-pressed="${n === nEdad}" ${n > max ? "disabled" : ""}>
       ${n} cartas</button>`).join("");
   $("#tallasEdad").querySelectorAll(".talla").forEach(b => b.onclick = () => { nEdad = +b.dataset.n; pintarTallasEdad(); });
@@ -534,11 +547,24 @@ function pintarTallasEdad() {
 $("#nivelesEdad").querySelectorAll(".nivel").forEach(b => b.onclick = () => {
   difEdad = b.dataset.dif;
   $("#nivelesEdad").querySelectorAll(".nivel").forEach(x => x.setAttribute("aria-pressed", x === b));
+  pintarTallasEdad();
+});
+$("#nivelesImpDif").querySelectorAll(".nivel").forEach(b => b.onclick = () => {
+  difImp = b.dataset.dif;
+  $("#nivelesImpDif").querySelectorAll(".nivel").forEach(x => x.setAttribute("aria-pressed", x === b));
+  pintarTallasImpostor();
 });
 $("#nivelesImpostor").querySelectorAll(".nivel").forEach(b => b.onclick = () => {
   nPaneles = +b.dataset.np;
   $("#nivelesImpostor").querySelectorAll(".nivel").forEach(x => x.setAttribute("aria-pressed", x === b));
 });
+function pintarTallasImpostor() {
+  $("#tallasImpostor").innerHTML = TAMANOS_IMPOSTOR.map(n => {
+    const ok = capacidadImpostor(n, difImp, personas);
+    return `<button class="talla" data-n="${n}" aria-pressed="${n === nCartasImp}" ${ok ? "" : "disabled"}>${n} cartas</button>`;
+  }).join("");
+  $("#tallasImpostor").querySelectorAll(".talla").forEach(b => b.onclick = () => { nCartasImp = +b.dataset.n; pintarTallasImpostor(); });
+}
 
 function refrescarOpciones() {
   const av = $("#aviso");
@@ -549,7 +575,8 @@ function refrescarOpciones() {
     pintarTallasEdad();
     if ((caps.edad || 0) < 4) { av.classList.remove("oculto"); av.textContent = `Solo hay ${caps.edad} personas con fecha de nacimiento. Añade más desde Administrar para jugar a las edades.`; $("#btnJugar").disabled = true; }
   } else if (juego === "impostor") {
-    if (!caps.impostor) { av.classList.remove("oculto"); av.textContent = "No hay datos suficientes para montar paneles de impostor."; $("#btnJugar").disabled = true; }
+    pintarTallasImpostor();
+    if (!capacidadImpostor(nCartasImp, difImp, personas)) { av.classList.remove("oculto"); av.textContent = "No hay datos suficientes para este tamaño. Prueba con menos cartas por panel."; $("#btnJugar").disabled = true; }
   }
 }
 
@@ -565,14 +592,23 @@ function empezarParejas() {
   const grupos = generarTablero(modo, nGrupos, personas);
   if (!grupos) { $("#aviso").classList.remove("oculto"); $("#aviso").textContent = "No se ha podido montar un tablero válido. Prueba con menos parejas."; return; }
   const cartas = [];
-  grupos.forEach((g, i) => g.forEach((p, j) => cartas.push({ uid: `${i}-${j}`, grupo: i, persona: p })));
+  grupos.forEach((g, i) => {
+    // en "la misma persona" el grupo es [p, p]: repartir 2 fotos distintas si las hay
+    const dosFotos = (modo === "personal") ? fotosDe(g[0]) : null;
+    g.forEach((p, j) => {
+      let foto = null;
+      if (dosFotos && dosFotos.length >= 2) foto = dosFotos[j % dosFotos.length];
+      else foto = fotoAzar(p);
+      cartas.push({ uid: `${i}-${j}`, grupo: i, persona: p, foto });
+    });
+  });
   barajar(cartas);
   estado = { tipo: "parejas", grupos, cartas, abiertas: [], hechos: 0, intentos: 0, t0: Date.now(), bloqueo: false, timer: null };
 
   const tab = $("#tablero");
   tab.innerHTML = cartas.map(c => `
     <button class="carta" data-uid="${c.uid}" aria-label="Carta oculta">
-      <span class="cara"><span class="dorso"></span><span class="frente">${caraCarta(c.persona)}</span></span>
+      <span class="cara"><span class="dorso"></span><span class="frente">${caraCarta(c.persona, c.foto)}</span></span>
     </button>`).join("");
   tab.querySelectorAll(".carta").forEach(b => b.onclick = () => voltear(b));
 
@@ -681,7 +717,7 @@ function finEdad() {
 
 /* ---------- JUEGO 3: ENCUENTRA AL IMPOSTOR ---------- */
 function empezarImpostor() {
-  const ronda = generarRondaImpostor(nPaneles, personas);
+  const ronda = generarRondaImpostor(nPaneles, nCartasImp, difImp, personas);
   if (!ronda) { $("#aviso").classList.remove("oculto"); $("#aviso").textContent = "No se han podido generar los paneles."; return; }
   estado = { tipo: "impostor", ronda, idx: 0, fallos: 0, t0: Date.now(), timer: null, bloqueo: false };
   $("#impFallos").textContent = "0"; $("#impTiempo").textContent = "0:00";
@@ -725,7 +761,7 @@ function pulsarImpostor(btn) {
 function finImpostor() {
   clearInterval(estado.timer);
   estado.seg = Math.max(1, Math.round((Date.now() - estado.t0) / 1000));
-  mostrarFin(`Encuentra al impostor · ${estado.ronda.length} paneles`, estado.seg, estado.fallos, `impostor_${estado.ronda.length}`, "fallos");
+  mostrarFin(`Impostor · ${difImp === "facil" ? "Fácil" : "Difícil"} · ${estado.ronda.length} paneles · ${nCartasImp} cartas`, estado.seg, estado.fallos, `impostor_${difImp}_${estado.ronda.length}_${nCartasImp}`, "fallos");
 }
 
 /* ===================== FIN (común) ===================== */
@@ -769,8 +805,8 @@ const RK_OPCIONES = () => {
   const o = [];
   Object.entries(MODOS).forEach(([k, m]) => (m.grupo === 3 ? TAMANOS_TRIO : TAMANOS_PAREJA).forEach(n =>
     o.push([`parejas_${k}_${n}`, `Parejas · ${m.etiqueta} · ${n}`])));
-  ["facil", "dificil"].forEach(d => TAMANOS_EDAD.forEach(n => o.push([`edad_${d}_${n}`, `Edad · ${d === "facil" ? "Fácil" : "Difícil"} · ${n} cartas`])));
-  TAMANOS_IMPOSTOR.forEach(n => o.push([`impostor_${n}`, `Impostor · ${n} paneles`]));
+  ["facil", "dificil"].forEach(d => tamanosEdad(d).forEach(n => o.push([`edad_${d}_${n}`, `Edad · ${d === "facil" ? "Fácil" : "Difícil"} · ${n} cartas`])));
+  ["facil", "dificil"].forEach(d => PANELES.forEach(np => TAMANOS_IMPOSTOR.forEach(nc => o.push([`impostor_${d}_${np}_${nc}`, `Impostor · ${d === "facil" ? "Fácil" : "Difícil"} · ${np} paneles · ${nc} cartas`]))));
   return o;
 };
 function abrirRanking(destacar = null) {
@@ -800,7 +836,7 @@ async function cargarTabla(destacar = null) {
 }
 $("#rkClave").onchange = e => { rkClave = e.target.value; cargarTabla(); };
 $("#btnVerRanking").onclick = () => {
-  rkClave = juego === "parejas" ? `parejas_${modo}_${nGrupos}` : juego === "edad" ? `edad_${difEdad}_${nEdad}` : `impostor_${nPaneles}`;
+  rkClave = juego === "parejas" ? `parejas_${modo}_${nGrupos}` : juego === "edad" ? `edad_${difEdad}_${nEdad}` : `impostor_${difImp}_${nPaneles}_${nCartasImp}`;
   rkVuelvoA = "portada"; abrirRanking();
 };
 $("#btnRkVolver").onclick = () => { aplicarColor(colorJuego[juego]()); ver(rkVuelvoA); };
@@ -825,7 +861,6 @@ if ("serviceWorker" in navigator && location.protocol.startsWith("http"))
   personas = await cargarPersonas();
   Object.keys(MODOS).forEach(k => caps[k] = capacidad(k, personas));
   caps.edad = capacidadEdad(personas);
-  caps.impostor = hayImpostor(personas) ? 1 : 0;
   aplicarColor(MODOS[modo].color);
   refrescarOpciones();
   if (esDemo()) $(".sub").insertAdjacentHTML("afterend",
