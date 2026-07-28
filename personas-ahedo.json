@@ -25,8 +25,7 @@
    "nombre": "Africa Perez",
    "sexo": "M",
    "padreId": "pedro_perez",
-   "madreId": "dayanara",
-   "nacimiento": "1980-07-01"
+   "madreId": "dayanara"
   },
   "aitana": {
    "nombre": "Aitana",
@@ -269,7 +268,8 @@
   "dayanara": {
    "nombre": "Dayanara",
    "sexo": "M",
-   "parejaId": "pedro_perez"
+   "parejaId": "pedro_perez",
+   "nacimiento": "1980-07-01"
   },
   "eguz_diez": {
    "nombre": "Eguz Diez",
