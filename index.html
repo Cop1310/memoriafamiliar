@@ -320,6 +320,13 @@ table.tabla tr:nth-child(1) td.pos{color:var(--ac)}
         <span class="rotulo">3 · Tamaño del tablero</span>
         <div class="tallas" id="tallas"></div>
       </div>
+      <div class="bloque">
+        <span class="rotulo">4 · Dificultad</span>
+        <div class="niveles" id="nivelesParejas">
+          <button class="nivel" data-dif="facil" aria-pressed="true">Fácil<small>vistazo al empezar</small></button>
+          <button class="nivel" data-dif="dificil" aria-pressed="false">Difícil<small>sin vistazo</small></button>
+        </div>
+      </div>
     </div>
 
     <div id="opcEdad" class="oculto">
@@ -436,6 +443,7 @@ let caps = {};
 let juego = "parejas";           // parejas | edad | impostor
 let modo = "personal";           // (parejas)
 let nGrupos = 4;                 // (parejas)
+let difParejas = "facil";        // (parejas) facil = vistazo inicial
 let difEdad = "facil", nEdad = 6;
 let difImp = "facil", nPaneles = 5, nCartasImp = 9;
 let estado = null;
@@ -521,6 +529,10 @@ function pintarTallasEdad() {
       ${n} cartas</button>`).join("");
   $("#tallasEdad").querySelectorAll(".talla").forEach(b => b.onclick = () => { nEdad = +b.dataset.n; pintarTallasEdad(); });
 }
+$("#nivelesParejas").querySelectorAll(".nivel").forEach(b => b.onclick = () => {
+  difParejas = b.dataset.dif;
+  $("#nivelesParejas").querySelectorAll(".nivel").forEach(x => x.setAttribute("aria-pressed", x === b));
+});
 $("#nivelesEdad").querySelectorAll(".nivel").forEach(b => b.onclick = () => {
   difEdad = b.dataset.dif;
   $("#nivelesEdad").querySelectorAll(".nivel").forEach(x => x.setAttribute("aria-pressed", x === b));
@@ -595,9 +607,27 @@ function empezarParejas() {
   $("#listaArbol").innerHTML = `<li class="vacio">Todavía no has emparejado a nadie.</li>`;
   $("#arbolN").textContent = "0";
   $("#arbol").open = !movil();
-  estado.timer = setInterval(() => $("#chipTiempo").textContent = reloj(Date.now() - estado.t0), 1000);
   ver("partida");
   requestAnimationFrame(ajustarActivo);
+
+  if (difParejas === "facil") {
+    // vistazo inicial: destapar todas, tiempo según tamaño, luego ocultar y arrancar
+    const n = cartas.length;
+    const ms = n <= 8 ? 1000 : n <= 12 ? 1500 : n <= 16 ? 2000 : n <= 24 ? 3000 : 4000;
+    estado.bloqueo = true;
+    const tab2 = $("#tablero");
+    tab2.querySelectorAll(".carta").forEach(b => b.classList.add("abierta"));
+    $("#pista").textContent = "Memoriza las posiciones…";
+    setTimeout(() => {
+      tab2.querySelectorAll(".carta").forEach(b => b.classList.remove("abierta"));
+      $("#pista").textContent = MODOS[modo].pista;
+      estado.bloqueo = false;
+      estado.t0 = Date.now();   // el crono arranca ahora
+    }, ms);
+  } else {
+    estado.t0 = Date.now();
+  }
+  estado.timer = setInterval(() => { if (!estado.bloqueo || estado.hechos) $("#chipTiempo").textContent = reloj(Date.now() - estado.t0); }, 1000);
 }
 function voltear(btn) {
   if (estado.bloqueo || btn.classList.contains("hecha") || btn.classList.contains("abierta")) return;
