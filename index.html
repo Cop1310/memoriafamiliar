@@ -360,7 +360,6 @@ table.tabla tr:nth-child(1) td.pos{color:var(--ac)}
     <p class="aviso oculto" id="aviso"></p>
     <div class="acciones" style="justify-content:flex-start">
       <button class="jugar" id="btnJugar">Empezar</button>
-      <button class="sec" id="btnVerRanking">Ver ranking</button>
     </div>
   </section>
 
@@ -411,33 +410,11 @@ table.tabla tr:nth-child(1) td.pos{color:var(--ac)}
 
   <!-- ======= FIN ======= -->
   <section id="fin" class="fin oculto">
-    <h1 id="finTitulo">Completado</h1>
+    <h1 id="finTitulo">¡Completado!</h1>
     <p class="marca-grande"><b id="finTiempo">0:00</b> · <b id="finIntentos">0</b> <span id="finEtiqSec">intentos</span></p>
-    <p class="record oculto" id="finRecord"></p>
-
-    <div class="guardar" id="zonaGuardar">
-      <input id="fJugador" maxlength="24" placeholder="Tu nombre" autocomplete="name">
-      <button class="jugar" id="btnGuardarMarca">Guardar en el ranking</button>
-    </div>
-
     <div class="acciones">
-      <button class="sec" id="btnOtra">Jugar otra vez</button>
+      <button class="jugar" id="btnOtra">Jugar otra vez</button>
       <button class="sec" id="btnVolver">Volver al menú</button>
-    </div>
-  </section>
-
-  <!-- ======= RANKING ======= -->
-  <section id="ranking" class="rank oculto">
-    <div class="cabecera">
-      <h1>Ranking</h1>
-      <div class="sel">
-        <select id="rkClave"></select>
-      </div>
-    </div>
-    <p class="sub">Ordenado por tiempo; la otra columna solo desempata. Cada juego, modo y tamaño tiene su propia clasificación.</p>
-    <div id="rkCuerpo"></div>
-    <div class="acciones" style="justify-content:flex-start">
-      <button class="sec" id="btnRkVolver">← Volver</button>
     </div>
   </section>
 </div>
@@ -445,7 +422,7 @@ table.tabla tr:nth-child(1) td.pos{color:var(--ac)}
 <script type="module">
 import { MODOS, TAMANOS_PAREJA, TAMANOS_TRIO, tamanosEdad, TAMANOS_IMPOSTOR, PANELES,
          cargarPersonas, generarTablero, capacidad, etiquetaRelacion, esDemo,
-         guardarMarca, cargarRanking, fotosDe, fotoAzar,
+         fotosDe, fotoAzar,
          generarTableroEdad, capacidadEdad, generarRondaImpostor, capacidadImpostor } from "./db.js";
 
 const $ = s => document.querySelector(s);
@@ -765,85 +742,19 @@ function finImpostor() {
 }
 
 /* ===================== FIN (común) ===================== */
-let finClave = "", finSeg = 0, finInt = 0;
 function mostrarFin(titulo, seg, secundario, clave, etiquetaSec = "intentos") {
-  finClave = clave; finSeg = seg; finInt = secundario;
-  $("#finTitulo").textContent = titulo;
+  $("#finTitulo").textContent = "¡Completado!";
   $("#finTiempo").textContent = reloj(seg * 1000);
   $("#finIntentos").textContent = secundario;
   $("#finEtiqSec").textContent = etiquetaSec;
-  $("#zonaGuardar").classList.remove("oculto");
-  $("#btnGuardarMarca").disabled = false; $("#btnGuardarMarca").textContent = "Guardar en el ranking";
-  $("#fJugador").value = leerJugador();
-  $("#finRecord").classList.add("oculto");
   ver("fin");
-  cargarRanking(clave).then(r => {
-    const puesto = r.filter(m => m.seg < seg || (m.seg === seg && m.intentos < secundario)).length + 1;
-    if (puesto <= 3 || r.length === 0) { $("#finRecord").textContent = `Entras en el puesto ${puesto} de este tablero`; $("#finRecord").classList.remove("oculto"); }
-  }).catch(() => {});
 }
-const leerJugador = () => { try { return localStorage.getItem("memoriaFamiliar.jugador") || ""; } catch (e) { return ""; } };
-$("#btnGuardarMarca").onclick = async () => {
-  const jugador = $("#fJugador").value.trim();
-  if (!jugador) { $("#fJugador").focus(); return; }
-  if (estado.guardada) return;
-  try { localStorage.setItem("memoriaFamiliar.jugador", jugador); } catch (e) {}
-  $("#btnGuardarMarca").disabled = true; $("#btnGuardarMarca").textContent = "Guardando…";
-  await guardarMarca(finClave, { jugador, seg: finSeg, intentos: finInt });
-  estado.guardada = true;
-  $("#zonaGuardar").classList.add("oculto");
-  rkClave = finClave; rkVuelvoA = "fin";
-  abrirRanking(jugador);
-};
 $("#btnOtra").onclick = () => $("#btnJugar").onclick();
 $("#btnVolver").onclick = () => ver("portada");
 
-/* ===================== RANKING ===================== */
-/* claves:  parejas_{modo}_{n} · edad_{dif}_{n} · impostor_{n} */
-let rkClave = "parejas_personal_4", rkVuelvoA = "portada";
-const RK_OPCIONES = () => {
-  const o = [];
-  Object.entries(MODOS).forEach(([k, m]) => (m.grupo === 3 ? TAMANOS_TRIO : TAMANOS_PAREJA).forEach(n =>
-    o.push([`parejas_${k}_${n}`, `Parejas · ${m.etiqueta} · ${n}`])));
-  ["facil", "dificil"].forEach(d => tamanosEdad(d).forEach(n => o.push([`edad_${d}_${n}`, `Edad · ${d === "facil" ? "Fácil" : "Difícil"} · ${n} cartas`])));
-  ["facil", "dificil"].forEach(d => PANELES.forEach(np => TAMANOS_IMPOSTOR.forEach(nc => o.push([`impostor_${d}_${np}_${nc}`, `Impostor · ${d === "facil" ? "Fácil" : "Difícil"} · ${np} paneles · ${nc} cartas`]))));
-  return o;
-};
-function abrirRanking(destacar = null) {
-  const ops = RK_OPCIONES();
-  if (!ops.find(([k]) => k === rkClave)) rkClave = ops[0][0];
-  $("#rkClave").innerHTML = ops.map(([k, txt]) => `<option value="${k}" ${k === rkClave ? "selected" : ""}>${txt}</option>`).join("");
-  cargarTabla(destacar);
-  ver("ranking");
-}
-async function cargarTabla(destacar = null) {
-  const color = rkClave.startsWith("edad") ? "azul" : rkClave.startsWith("impostor") ? "rosa" : "amb";
-  aplicarColor(color);
-  const secTxt = rkClave.startsWith("edad") ? "Reinicios" : rkClave.startsWith("impostor") ? "Fallos" : "Intentos";
-  $("#rkCuerpo").innerHTML = `<p class="vacio">Cargando…</p>`;
-  let marcas = [];
-  try { marcas = await cargarRanking(rkClave); } catch (e) {}
-  if (!marcas.length) { $("#rkCuerpo").innerHTML = `<p class="vacio">Nadie ha completado todavía este tablero. Sé el primero.</p>`; return; }
-  $("#rkCuerpo").innerHTML = `<table class="tabla">
-    <thead><tr><th></th><th>Jugador</th><th style="text-align:right">${secTxt}</th><th style="text-align:right">Tiempo</th></tr></thead>
-    <tbody>${marcas.map((m, i) => `
-      <tr class="${destacar && m.jugador === destacar && m.seg === finSeg ? "yo" : ""}">
-        <td class="pos">${String(i + 1).padStart(2, "0")}</td>
-        <td class="jug">${m.jugador}</td>
-        <td class="i">${m.intentos}</td>
-        <td class="t">${reloj(m.seg * 1000)}</td>
-      </tr>`).join("")}</tbody></table>`;
-}
-$("#rkClave").onchange = e => { rkClave = e.target.value; cargarTabla(); };
-$("#btnVerRanking").onclick = () => {
-  rkClave = juego === "parejas" ? `parejas_${modo}_${nGrupos}` : juego === "edad" ? `edad_${difEdad}_${nEdad}` : `impostor_${difImp}_${nPaneles}_${nCartasImp}`;
-  rkVuelvoA = "portada"; abrirRanking();
-};
-$("#btnRkVolver").onclick = () => { aplicarColor(colorJuego[juego]()); ver(rkVuelvoA); };
-
 /* ===================== NAVEGACIÓN ===================== */
 function ver(cual) {
-  ["portada", "partida", "partidaEdad", "partidaImpostor", "fin", "ranking"].forEach(s => $("#" + s).classList.toggle("oculto", s !== cual));
+  ["portada", "partida", "partidaEdad", "partidaImpostor", "fin"].forEach(s => $("#" + s).classList.toggle("oculto", s !== cual));
   document.body.classList.toggle("jugando", cual.startsWith("partida"));
   if (!cual.startsWith("partida") && estado?.timer) clearInterval(estado.timer);
   window.scrollTo(0, 0);
