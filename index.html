@@ -619,7 +619,7 @@ function empezarParejas() {
   if (difParejas === "facil") {
     // vistazo inicial: destapar todas, tiempo según tamaño, luego ocultar y arrancar
     const n = cartas.length;
-    const ms = n <= 8 ? 1000 : n <= 12 ? 1500 : n <= 16 ? 2000 : n <= 24 ? 3000 : 4000;
+    const ms = n <= 8 ? 2000 : n <= 12 ? 2500 : n <= 16 ? 3000 : n <= 24 ? 4000 : 5000;
     estado.bloqueo = true;
     const tab2 = $("#tablero");
     tab2.querySelectorAll(".carta").forEach(b => b.classList.add("abierta"));
