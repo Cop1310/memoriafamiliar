@@ -1,6 +1,6 @@
 // Cambia VERSION en cada despliegue para forzar la actualización en Android/Chrome.
-const VERSION = "mf-v22";
-const ARCHIVOS = ["./", "./index.html", "./admin.html", "./db.js", "./manifest.json"];
+const VERSION = "mf-v23";
+const ARCHIVOS = ["./", "./index.html", "./admin.html", "./db.js", "./manifest.json", "./fondo.jpg"];
 
 self.addEventListener("install", e => {
   e.waitUntil(caches.open(VERSION).then(c => c.addAll(ARCHIVOS)).then(() => self.skipWaiting()));
