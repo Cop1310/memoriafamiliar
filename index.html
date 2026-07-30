@@ -51,6 +51,15 @@ header{display:flex;align-items:baseline;justify-content:space-between;gap:12px;
 .enlace:hover,.enlace:focus-visible{color:var(--papel);border-color:var(--ac)}
 
 /* ---------- portada ---------- */
+.pasos-barra{display:flex;align-items:center;gap:12px;margin-bottom:6px;min-height:34px}
+.volver-paso{width:34px;height:34px;flex:none;border-radius:50%;border:1px solid var(--tinta-3);
+  background:var(--tinta-2);color:var(--papel);font-size:22px;line-height:1;cursor:pointer;display:flex;align-items:center;justify-content:center}
+.volver-paso:active{transform:scale(.94)}
+.migas{color:var(--tenue);font-size:13px;font-weight:500;display:flex;flex-wrap:wrap;gap:4px;align-items:center}
+.migas b{color:var(--ac);font-weight:600}
+.migas .sep{opacity:.5}
+.paso{display:flex;flex-direction:column;gap:14px;animation:aparecePaso .22s ease}
+@keyframes aparecePaso{from{opacity:0;transform:translateX(8px)}to{opacity:1;transform:none}}
 .portada{margin:auto 0;display:flex;flex-direction:column;gap:30px}
 h1{font-family:var(--serif);font-weight:700;font-size:clamp(30px,6vw,50px);line-height:1.04;letter-spacing:-.02em;max-width:14ch}
 h1 span{color:var(--ac)}
@@ -294,13 +303,18 @@ table.tabla tr:nth-child(1) td.pos{color:var(--ac)}
 
   <!-- ======= PORTADA ======= -->
   <section id="portada" class="portada">
-    <div>
-      <h1>¿Cuánto sabes de <span>Ahedo</span>?</h1>
-      <p class="sub">Tres juegos con la gente del pueblo. Elige uno para empezar.</p>
+    <!-- barra de pasos: flecha atrás + migas -->
+    <div class="pasos-barra oculto" id="pasosBarra">
+      <button class="volver-paso" id="btnPasoAtras" aria-label="Atrás">‹</button>
+      <div class="migas" id="migas"></div>
     </div>
 
-    <div class="bloque">
-      <span class="rotulo">1 · Elige juego</span>
+    <!-- PASO 0: elegir juego -->
+    <div class="paso" id="paso-juego">
+      <div>
+        <h1>¿Cuánto sabes de <span>Ahedo</span>?</h1>
+        <p class="sub">Tres juegos con la gente del pueblo. Toca uno para empezar.</p>
+      </div>
       <div class="juegos" id="juegos">
         <button class="juego g-parejas" data-juego="parejas" aria-pressed="true">
           <span class="ico">🃏</span><b>Busca parejas</b>
@@ -317,63 +331,41 @@ table.tabla tr:nth-child(1) td.pos{color:var(--ac)}
       </div>
     </div>
 
-    <div id="opcParejas">
-      <div class="bloque">
-        <span class="rotulo">2 · Tipo de pareja</span>
-        <div class="modos" id="modos"></div>
-      </div>
-      <div class="bloque">
-        <span class="rotulo">3 · Tamaño del tablero</span>
-        <div class="tallas" id="tallas"></div>
-      </div>
-      <div class="bloque">
-        <span class="rotulo">4 · Dificultad</span>
-        <div class="niveles" id="nivelesParejas">
-          <button class="nivel" data-dif="facil" aria-pressed="true">Fácil<small>vistazo al empezar</small></button>
-          <button class="nivel" data-dif="dificil" aria-pressed="false">Difícil<small>sin vistazo</small></button>
-        </div>
+    <!-- PASOS de parejas -->
+    <div class="paso oculto" id="paso-modos"><span class="rotulo">Tipo de pareja</span><div class="modos" id="modos"></div></div>
+    <div class="paso oculto" id="paso-nivelesParejas"><span class="rotulo">Dificultad</span>
+      <div class="niveles" id="nivelesParejas">
+        <button class="nivel" data-dif="facil" aria-pressed="true">Fácil<small>vistazo al empezar</small></button>
+        <button class="nivel" data-dif="dificil" aria-pressed="false">Difícil<small>sin vistazo</small></button>
       </div>
     </div>
+    <div class="paso oculto" id="paso-tallas"><span class="rotulo">Tamaño del tablero</span><div class="tallas" id="tallas"></div></div>
 
-    <div id="opcEdad" class="oculto">
-      <div class="bloque">
-        <span class="rotulo">2 · Dificultad</span>
-        <div class="niveles" id="nivelesEdad">
-          <button class="nivel" data-dif="facil" aria-pressed="true">Fácil<small>edades separadas</small></button>
-          <button class="nivel" data-dif="dificil" aria-pressed="false">Difícil<small>edades muy próximas</small></button>
-        </div>
-      </div>
-      <div class="bloque">
-        <span class="rotulo">3 · Cuántas cartas</span>
-        <div class="tallas" id="tallasEdad"></div>
+    <!-- PASOS de edad -->
+    <div class="paso oculto" id="paso-nivelesEdad"><span class="rotulo">Dificultad</span>
+      <div class="niveles" id="nivelesEdad">
+        <button class="nivel" data-dif="facil" aria-pressed="true">Fácil<small>edades separadas</small></button>
+        <button class="nivel" data-dif="dificil" aria-pressed="false">Difícil<small>edades muy próximas</small></button>
       </div>
     </div>
+    <div class="paso oculto" id="paso-tallasEdad"><span class="rotulo">Cuántas cartas</span><div class="tallas" id="tallasEdad"></div></div>
 
-    <div id="opcImpostor" class="oculto">
-      <div class="bloque">
-        <span class="rotulo">2 · Dificultad</span>
-        <div class="niveles" id="nivelesImpDif">
-          <button class="nivel" data-dif="facil" aria-pressed="true">Fácil<small>parentescos</small></button>
-          <button class="nivel" data-dif="dificil" aria-pressed="false">Difícil<small>además, fechas</small></button>
-        </div>
-      </div>
-      <div class="bloque">
-        <span class="rotulo">3 · Número de paneles</span>
-        <div class="niveles" id="nivelesImpostor">
-          <button class="nivel" data-np="5" aria-pressed="true">5 paneles</button>
-          <button class="nivel" data-np="10" aria-pressed="false">10 paneles</button>
-        </div>
-      </div>
-      <div class="bloque">
-        <span class="rotulo">4 · Cartas por panel</span>
-        <div class="tallas" id="tallasImpostor"></div>
+    <!-- PASOS de impostor -->
+    <div class="paso oculto" id="paso-nivelesImpDif"><span class="rotulo">Dificultad</span>
+      <div class="niveles" id="nivelesImpDif">
+        <button class="nivel" data-dif="facil" aria-pressed="true">Fácil<small>parentescos</small></button>
+        <button class="nivel" data-dif="dificil" aria-pressed="false">Difícil<small>además, fechas</small></button>
       </div>
     </div>
+    <div class="paso oculto" id="paso-nivelesImpostor"><span class="rotulo">Número de paneles</span>
+      <div class="niveles" id="nivelesImpostor">
+        <button class="nivel" data-np="5" aria-pressed="true">5 paneles</button>
+        <button class="nivel" data-np="10" aria-pressed="false">10 paneles</button>
+      </div>
+    </div>
+    <div class="paso oculto" id="paso-tallasImpostor"><span class="rotulo">Cartas por panel</span><div class="tallas" id="tallasImpostor"></div></div>
 
     <p class="aviso oculto" id="aviso"></p>
-    <div class="acciones" style="justify-content:flex-start">
-      <button class="jugar" id="btnJugar">Empezar</button>
-    </div>
   </section>
 
   <!-- ======= PARTIDA ======= -->
@@ -492,17 +484,68 @@ window.visualViewport?.addEventListener("resize", ajustarActivo);
 const aplicarColor = c => document.documentElement.style.setProperty("--ac", `var(--${c})`);
 const colorJuego = { parejas: () => MODOS[modo].color, edad: () => "azul", impostor: () => "rosa" };
 
+/* ===================== ASISTENTE POR PASOS ===================== */
+const FLUJO = {
+  parejas: ["paso-modos", "paso-nivelesParejas", "paso-tallas"],
+  edad: ["paso-nivelesEdad", "paso-tallasEdad"],
+  impostor: ["paso-nivelesImpDif", "paso-nivelesImpostor", "paso-tallasImpostor"]
+};
+const NOMBRE_JUEGO = { parejas: "Busca parejas", edad: "Ordena por edad", impostor: "Encuentra al impostor" };
+let pasoIdx = -1;   // -1 = pantalla de elegir juego
+
+function etiquetaPaso(id) {
+  if (id === "paso-modos") return MODOS[modo].etiqueta;
+  if (id === "paso-nivelesParejas") return difParejas === "facil" ? "Fácil" : "Difícil";
+  if (id === "paso-nivelesEdad") return difEdad === "facil" ? "Fácil" : "Difícil";
+  if (id === "paso-nivelesImpDif") return difImp === "facil" ? "Fácil" : "Difícil";
+  if (id === "paso-nivelesImpostor") return nPaneles + " paneles";
+  return "";
+}
+function pintarMigas() {
+  const flow = FLUJO[juego];
+  const partes = [`<b>${NOMBRE_JUEGO[juego]}</b>`];
+  for (let i = 0; i < pasoIdx; i++) { const e = etiquetaPaso(flow[i]); if (e) partes.push(e); }
+  $("#migas").innerHTML = partes.join(' <span class="sep">›</span> ');
+}
+function mostrarPaso() {
+  document.querySelectorAll("#portada .paso").forEach(p => p.classList.add("oculto"));
+  $("#aviso").classList.add("oculto");
+  if (pasoIdx < 0) {
+    $("#paso-juego").classList.remove("oculto");
+    $("#pasosBarra").classList.add("oculto");
+  } else {
+    $("#" + FLUJO[juego][pasoIdx]).classList.remove("oculto");
+    $("#pasosBarra").classList.remove("oculto");
+    pintarMigas();
+  }
+}
+function avanzarPaso() {
+  if (pasoIdx < FLUJO[juego].length - 1) { pasoIdx++; mostrarPaso(); }
+}
+function atrasPaso() {
+  if (pasoIdx <= 0) { pasoIdx = -1; } else { pasoIdx--; }
+  mostrarPaso();
+}
+function reiniciarAsistente() { pasoIdx = -1; mostrarPaso(); }
+$("#btnPasoAtras").onclick = atrasPaso;
+
+function arrancarJuego() {
+  if (juego === "parejas") empezarParejas();
+  else if (juego === "edad") empezarEdad();
+  else empezarImpostor();
+}
+
+/* elegir juego → entra en su primer paso */
 $("#juegos").querySelectorAll(".juego").forEach(b => b.onclick = () => {
   juego = b.dataset.juego;
   $("#juegos").querySelectorAll(".juego").forEach(x => x.setAttribute("aria-pressed", x === b));
-  $("#opcParejas").classList.toggle("oculto", juego !== "parejas");
-  $("#opcEdad").classList.toggle("oculto", juego !== "edad");
-  $("#opcImpostor").classList.toggle("oculto", juego !== "impostor");
   aplicarColor(colorJuego[juego]());
   refrescarOpciones();
+  pasoIdx = 0;
+  mostrarPaso();
 });
 
-/* --- parejas: modos y tallas (como antes) --- */
+/* --- parejas: modos y tallas --- */
 function pintarModos() {
   $("#modos").innerHTML = Object.entries(MODOS).map(([k, m]) => `
     <button class="modo ${k}" data-modo="${k}" aria-pressed="${k === modo}" ${caps[k] < (k === "trio" ? 5 : 4) ? "disabled" : ""}>
@@ -511,6 +554,7 @@ function pintarModos() {
     </button>`).join("");
   $("#modos").querySelectorAll(".modo").forEach(b => b.onclick = () => {
     modo = b.dataset.modo; aplicarColor(MODOS[modo].color); pintarModos(); pintarTallasParejas();
+    avanzarPaso();
   });
 }
 function pintarTallasParejas() {
@@ -522,7 +566,7 @@ function pintarTallasParejas() {
     <button class="talla" data-n="${n}" aria-pressed="${n === nGrupos}" ${n > max ? "disabled" : ""}>
       ${n} ${m.grupo === 3 ? "tríos" : "parejas"}<span>${n * m.grupo} cartas</span>
     </button>`).join("");
-  $("#tallas").querySelectorAll(".talla").forEach(b => b.onclick = () => { nGrupos = +b.dataset.n; pintarTallasParejas(); });
+  $("#tallas").querySelectorAll(".talla").forEach(b => b.onclick = () => { nGrupos = +b.dataset.n; arrancarJuego(); });
 }
 
 /* --- edad: tallas --- */
@@ -533,54 +577,50 @@ function pintarTallasEdad() {
   $("#tallasEdad").innerHTML = lista.map(n => `
     <button class="talla" data-n="${n}" aria-pressed="${n === nEdad}" ${n > max ? "disabled" : ""}>
       ${n} cartas</button>`).join("");
-  $("#tallasEdad").querySelectorAll(".talla").forEach(b => b.onclick = () => { nEdad = +b.dataset.n; pintarTallasEdad(); });
+  $("#tallasEdad").querySelectorAll(".talla").forEach(b => b.onclick = () => { nEdad = +b.dataset.n; arrancarJuego(); });
 }
 $("#nivelesParejas").querySelectorAll(".nivel").forEach(b => b.onclick = () => {
   difParejas = b.dataset.dif;
   $("#nivelesParejas").querySelectorAll(".nivel").forEach(x => x.setAttribute("aria-pressed", x === b));
+  avanzarPaso();
 });
 $("#nivelesEdad").querySelectorAll(".nivel").forEach(b => b.onclick = () => {
   difEdad = b.dataset.dif;
   $("#nivelesEdad").querySelectorAll(".nivel").forEach(x => x.setAttribute("aria-pressed", x === b));
   pintarTallasEdad();
+  avanzarPaso();
 });
 $("#nivelesImpDif").querySelectorAll(".nivel").forEach(b => b.onclick = () => {
   difImp = b.dataset.dif;
   $("#nivelesImpDif").querySelectorAll(".nivel").forEach(x => x.setAttribute("aria-pressed", x === b));
   pintarTallasImpostor();
+  avanzarPaso();
 });
 $("#nivelesImpostor").querySelectorAll(".nivel").forEach(b => b.onclick = () => {
   nPaneles = +b.dataset.np;
   $("#nivelesImpostor").querySelectorAll(".nivel").forEach(x => x.setAttribute("aria-pressed", x === b));
+  avanzarPaso();
 });
 function pintarTallasImpostor() {
   $("#tallasImpostor").innerHTML = TAMANOS_IMPOSTOR.map(n => {
     const ok = capacidadImpostor(n, difImp, personas);
     return `<button class="talla" data-n="${n}" aria-pressed="${n === nCartasImp}" ${ok ? "" : "disabled"}>${n} cartas</button>`;
   }).join("");
-  $("#tallasImpostor").querySelectorAll(".talla").forEach(b => b.onclick = () => { nCartasImp = +b.dataset.n; pintarTallasImpostor(); });
+  $("#tallasImpostor").querySelectorAll(".talla").forEach(b => b.onclick = () => { nCartasImp = +b.dataset.n; arrancarJuego(); });
 }
 
 function refrescarOpciones() {
   const av = $("#aviso");
   av.classList.add("oculto");
-  $("#btnJugar").disabled = false;
   if (juego === "parejas") { pintarModos(); pintarTallasParejas(); }
   else if (juego === "edad") {
     pintarTallasEdad();
-    if ((caps.edad || 0) < 4) { av.classList.remove("oculto"); av.textContent = `Solo hay ${caps.edad} personas con fecha de nacimiento. Añade más desde Administrar para jugar a las edades.`; $("#btnJugar").disabled = true; }
+    if ((caps.edad || 0) < 4) { av.classList.remove("oculto"); av.textContent = `Solo hay ${caps.edad} personas con fecha de nacimiento. Añade más desde Administrar para jugar a las edades.`; }
   } else if (juego === "impostor") {
     pintarTallasImpostor();
-    if (!capacidadImpostor(nCartasImp, difImp, personas)) { av.classList.remove("oculto"); av.textContent = "No hay datos suficientes para este tamaño. Prueba con menos cartas por panel."; $("#btnJugar").disabled = true; }
+    if (!capacidadImpostor(nCartasImp, difImp, personas)) { av.classList.remove("oculto"); av.textContent = "No hay datos suficientes para este tamaño. Prueba con menos cartas por panel."; }
   }
 }
-
-/* ===================== ARRANQUE DE PARTIDA ===================== */
-$("#btnJugar").onclick = () => {
-  if (juego === "parejas") empezarParejas();
-  else if (juego === "edad") empezarEdad();
-  else empezarImpostor();
-};
 
 /* ---------- JUEGO 1: BUSCA PAREJAS ---------- */
 function empezarParejas() {
@@ -785,7 +825,7 @@ function mostrarFin(titulo, seg, secundario, clave, etiquetaSec = "intentos") {
   $("#finEtiqSec").textContent = etiquetaSec;
   ver("fin");
 }
-$("#btnOtra").onclick = () => $("#btnJugar").onclick();
+$("#btnOtra").onclick = () => arrancarJuego();
 $("#btnVolver").onclick = () => ver("portada");
 
 /* ===================== NAVEGACIÓN ===================== */
@@ -794,6 +834,7 @@ function ver(cual) {
   document.body.classList.toggle("jugando", cual.startsWith("partida"));
   document.body.classList.toggle("en-portada", cual === "portada");
   if (!cual.startsWith("partida") && estado?.timer) clearInterval(estado.timer);
+  if (cual === "portada") reiniciarAsistente();
   window.scrollTo(0, 0);
 }
 $("#btnSalir").onclick = () => { clearInterval(estado.timer); ver("portada"); };
