@@ -129,6 +129,14 @@ export const esDemo = () => !USAR_FIREBASE;
 export const fotosDe = p => p.fotos && p.fotos.length ? p.fotos : (p.foto ? [p.foto] : []);
 export const fotoAzar = p => { const f = fotosDe(p); return f.length ? f[(Math.random() * f.length) | 0] : null; };
 
+/* Si es true, solo las personas CON foto aparecen como cartas en los juegos.
+   Las que no tienen foto siguen en la base como "conectores" de parentesco
+   (una madre sin foto sigue haciendo hermanos a sus hijos, etc.), pero nunca
+   salen como carta. Poner en false para que jueguen todas. */
+export const SOLO_CON_FOTO = true;
+const tieneFoto = p => fotosDe(p).length > 0;
+const cartasElegibles = lista => SOLO_CON_FOTO ? lista.filter(tieneFoto) : lista;
+
 /* ---------- 3bis. RANKING ---------------------------------
    Un ranking independiente por combinación modo + nº de grupos:
    /ranking/{modo}_{n}/{pushId} = { jugador, seg, intentos, ts }
@@ -259,7 +267,7 @@ function tableroValido(modo, grupos) {
  * o null si la base de datos no da para tanto.
  */
 export function generarTablero(modo, n, personas) {
-  const lista = Object.entries(personas).map(([id, p]) => ({ id, ...p }));
+  const lista = cartasElegibles(Object.entries(personas).map(([id, p]) => ({ id, ...p })));
 
   if (modo === "personal") {
     if (lista.length < n) return null;
@@ -284,7 +292,7 @@ export function generarTablero(modo, n, personas) {
 
 /** Máximo nº de grupos que admite la BD en este modo (para bloquear tamaños imposibles). */
 export function capacidad(modo, personas) {
-  const lista = Object.entries(personas).map(([id, p]) => ({ id, ...p }));
+  const lista = cartasElegibles(Object.entries(personas).map(([id, p]) => ({ id, ...p })));
   if (modo === "personal") return lista.length;
   const candidatos = gruposCandidatos(modo, lista);
   let mejor = 0;
@@ -349,7 +357,7 @@ function ciertoOrden(a, b) {
 }
 
 export function personasConEdad(personas) {
-  return Object.entries(personas).map(([id, p]) => ({ id, ...p })).filter(p => p.nacimiento && p.nacimiento.length >= 4);
+  return cartasElegibles(Object.entries(personas).map(([id, p]) => ({ id, ...p }))).filter(p => p.nacimiento && p.nacimiento.length >= 4);
 }
 
 const _baraja = a => { const x = [...a]; for (let i = x.length - 1; i > 0; i--) { const j = (Math.random() * (i + 1)) | 0;[x[i], x[j]] = [x[j], x[i]]; } return x; };
@@ -433,7 +441,7 @@ const _panel = (tipo, texto, normales, impostor) => ({
    Cada generador devuelve {tipo, texto, cartas} o null. El 'tipo' sirve para
    no repetir la misma clase de pregunta dentro de una ronda. */
 function construirPanel(N, dif, personas) {
-  const L = Object.entries(personas).map(([id, p]) => ({ id, ...p }));
+  const L = cartasElegibles(Object.entries(personas).map(([id, p]) => ({ id, ...p })));
   const need = N - 1;
   const generadores = [];
   const MES = ["", "enero", "febrero", "marzo", "abril", "mayo", "junio", "julio", "agosto", "septiembre", "octubre", "noviembre", "diciembre"];
@@ -469,9 +477,10 @@ function construirPanel(N, dif, personas) {
   if (need % 2 === 0) {
     const parejas = [];
     const hecho = new Set();
+    const enL = new Set(L.map(p => p.id));
     L.forEach(p => {
-      if (p.parejaId && personas[p.parejaId] && !hecho.has(p.id) && !hecho.has(p.parejaId)) {
-        parejas.push([p, { id: p.parejaId, ...personas[p.parejaId] }]);
+      if (p.parejaId && enL.has(p.parejaId) && !hecho.has(p.id) && !hecho.has(p.parejaId)) {
+        parejas.push([p, L.find(q => q.id === p.parejaId)]);
         hecho.add(p.id); hecho.add(p.parejaId);
       }
     });
